@@ -55,7 +55,7 @@ app.get('/buy', (req, res) => {
 app.get('/hold', (req, res) => {
   res.render('hold', {
     title: '집을 가지고 있어요 - 부동산계산하기',
-    description: '재산세, 종합부동산세 계산'
+    description: '재산세, 종합부동산세, 임대소득세 계산'
   });
 });
 
@@ -83,6 +83,72 @@ app.get('/calculator/acquisition-tax', (req, res) => {
 app.get('/calculator/dsr', (req, res) => {
   res.render('dsr', {
     title: '대출 가능 금액 (DSR) 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/ltv', (req, res) => {
+  res.render('ltv', {
+    title: '주택담보대출 한도 (LTV) 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/brokerage-fee', (req, res) => {
+  res.render('brokerage-fee', {
+    title: '중개수수료 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/registration-fee', (req, res) => {
+  res.render('registration-fee', {
+    title: '등기비용 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/total-cost', (req, res) => {
+  res.render('total-cost', {
+    title: '총 구매비용 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/total-holding-tax', (req, res) => {
+  res.render('total-holding-tax', {
+    title: '보유세 통합 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/property-tax', (req, res) => {
+  res.render('property-tax', {
+    title: '재산세 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/comprehensive-tax', (req, res) => {
+  res.render('comprehensive-tax', {
+    title: '종합부동산세 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/rental-income-tax', (req, res) => {
+  res.render('rental-income-tax', {
+    title: '임대소득세 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/rental-yield', (req, res) => {
+  res.render('rental-yield', {
+    title: '임대수익률 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/maintenance-cost', (req, res) => {
+  res.render('maintenance-cost', {
+    title: '관리비 및 유지비 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/capital-gains-tax', (req, res) => {
+  res.render('capital-gains-tax', {
+    title: '양도소득세 계산기 - 부동산계산하기'
   });
 });
 
