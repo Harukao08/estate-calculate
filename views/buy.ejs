@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description %>">
+    <title><%= title %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: color 0.3s ease;
+        }
+        .back-button:hover {
+            color: var(--primary);
+        }
+        .page-header {
+            margin-bottom: 32px;
+        }
+        .page-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #FFE5E5 0%, #FFF0E5 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .page-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        .calculator-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .calculator-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        .calculator-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(4px);
+        }
+        .calculator-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-main);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .calculator-info {
+            flex: 1;
+        }
+        .calculator-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .calculator-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .calculator-arrow {
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+        .calculator-item:hover .calculator-arrow {
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(0, 217, 181, 0.05) 100%);
+            border: 1px solid rgba(0, 102, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        .info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px;">
+        <a href="/" class="back-button">
+            ← 홈으로 돌아가기
+        </a>
+
+        <div class="page-header">
+            <div class="page-icon">💰</div>
+            <h1 class="page-title">집을 사려고 해요</h1>
+            <p class="page-description">집을 구매할 때 필요한 세금과 비용을 계산해보세요</p>
+        </div>
+
+        <div class="info-box">
+            <div class="info-title">
+                💡 집 구매 시 주요 비용
+            </div>
+            <div class="info-content">
+                집을 살 때는 매매가 외에도 취득세, 중개수수료, 등기비용 등 추가 비용이 발생합니다. 
+                또한 대출을 받을 경우 본인의 소득과 기존 대출 현황에 따라 대출 가능 금액이 달라집니다.
+            </div>
+        </div>
+
+        <h2 class="section-title">필요한 계산을 선택하세요</h2>
+        
+        <div class="calculator-grid">
+            <a href="/calculator/acquisition-tax" class="calculator-item">
+                <div class="calculator-icon">📋</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">취득세 계산</div>
+                    <div class="calculator-desc">주택 구매 시 내야 할 취득세 확인</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+
+            <a href="/calculator/dsr" class="calculator-item">
+                <div class="calculator-icon">💳</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">대출 가능 금액 (DSR)</div>
+                    <div class="calculator-desc">소득 대비 대출 가능한 금액 계산</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+
+            <a href="/calculator/ltv" class="calculator-item">
+                <div class="calculator-icon">🏦</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">주택담보대출 한도 (LTV)</div>
+                    <div class="calculator-desc">주택가격 대비 대출 가능 금액</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+
+            <a href="/calculator/brokerage-fee" class="calculator-item">
+                <div class="calculator-icon">🤝</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">중개수수료 계산</div>
+                    <div class="calculator-desc">부동산 거래 시 복비 계산</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+
+            <a href="/calculator/registration-fee" class="calculator-item">
+                <div class="calculator-icon">📝</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">등기비용 계산</div>
+                    <div class="calculator-desc">소유권 이전 등기 시 필요한 비용</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+
+            <a href="/calculator/total-cost" class="calculator-item">
+                <div class="calculator-icon">🧮</div>
+                <div class="calculator-info">
+                    <div class="calculator-name">총 구매비용 계산</div>
+                    <div class="calculator-desc">취득세부터 등기비까지 모든 비용 통합</div>
+                </div>
+                <div class="calculator-arrow">›</div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-info">
+        <p class="disclaimer">
+            본 계산기는 참고용이며, 정확한 세액은<br>
+            전문가 상담을 권장합니다.
+        </p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

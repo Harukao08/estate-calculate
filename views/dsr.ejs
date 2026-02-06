@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대출 가능 금액 (DSR) 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/buy" class="back-button">
+            ← 집을 사려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">💳</div>
+            <h1 class="calculator-title">대출 가능 금액 (DSR)</h1>
+            <p class="calculator-subtitle">소득 대비 대출 가능한 금액을 계산합니다</p>
+        </div>
+
+        <!-- DSR 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 DSR(총부채원리금상환비율)이란?
+            </div>
+            <div class="info-content">
+                DSR은 연간 소득 대비 모든 대출의 원리금 상환액 비율입니다. 
+                2024년 기준 DSR은 40%가 적용되며, 고소득자(연 8천만원 초과)는 50%가 적용됩니다.
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">소득 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">연간 소득 (세전)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="annualIncome" class="input-field" placeholder="예: 60000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">근로소득, 사업소득 등 모든 소득 포함</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">기존 대출 연간 원리금 상환액</label>
+                <div class="input-wrapper">
+                    <input type="text" id="existingLoan" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">신용대출, 자동차 할부 등 모든 대출 포함</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">대출 조건</h2>
+            
+            <div class="input-group">
+                <label class="input-label">대출 금리</label>
+                <div class="input-wrapper">
+                    <input type="text" id="interestRate" class="input-field" placeholder="예: 4.5" inputmode="decimal" value="4.5">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">주택담보대출 금리 (2026년 평균: 4~5%)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">대출 기간</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="loanPeriod" value="20">
+                        <span class="radio-label">20년</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="loanPeriod" value="30" checked>
+                        <span class="radio-label">30년</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="loanPeriod" value="40">
+                        <span class="radio-label">40년</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">상환 방식</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="repaymentType" value="equal" checked>
+                        <span class="radio-label">원리금균등상환</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="repaymentType" value="principal">
+                        <span class="radio-label">원금균등상환</span>
+                    </label>
+                </div>
+                <div class="input-helper">원리금균등: 매월 같은 금액 / 원금균등: 초기 부담 높음</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                대출 가능 금액 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">최대 대출 가능 금액</div>
+                <div class="result-value" id="maxLoanAmount">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">DSR 상세 정보</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 소득</span>
+                    <span class="breakdown-value" id="displayIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">적용 DSR 비율</span>
+                    <span class="breakdown-value" id="dsrRate">40%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 상환 가능액</span>
+                    <span class="breakdown-value" id="annualRepayment">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기존 대출 상환액</span>
+                    <span class="breakdown-value" id="displayExisting">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">신규 대출 가능 상환액</span>
+                    <span class="breakdown-value" id="newLoanRepayment">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">월 상환 정보</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">월 상환액</span>
+                    <span class="breakdown-value" id="monthlyPayment">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">총 상환액</span>
+                    <span class="breakdown-value" id="totalPayment">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">총 이자</span>
+                    <span class="breakdown-value" id="totalInterest">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="dsrInfo"></div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼 이벤트
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateDSR);
+            }
+
+            // 리셋 버튼 이벤트
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼 이벤트
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const numericInputs = ['annualIncome', 'existingLoan'];
+            numericInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9]/g, '');
+                        e.target.value = value;
+                    });
+                }
+            });
+
+            // 금리 입력 필드
+            const interestRateInput = document.getElementById('interestRate');
+            if (interestRateInput) {
+                interestRateInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9.]/g, '');
+                    // 소수점 하나만 허용
+                    const parts = value.split('.');
+                    if (parts.length > 2) {
+                        value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // 엔터 키로 계산
+            ['annualIncome', 'existingLoan', 'interestRate'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            calculateDSR();
+                        }
+                    });
+                }
+            });
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        // 원 단위 표시
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        // 억/만 단위 표시
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 월 상환액 계산 (원리금균등)
+        function calculateMonthlyPaymentEqual(principal, annualRate, months) {
+            const monthlyRate = annualRate / 12 / 100;
+            if (monthlyRate === 0) return principal / months;
+            
+            const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                           (Math.pow(1 + monthlyRate, months) - 1);
+            return payment;
+        }
+
+        // 월 상환액 계산 (원금균등)
+        function calculateMonthlyPaymentPrincipal(principal, annualRate, months) {
+            const monthlyRate = annualRate / 12 / 100;
+            const principalPayment = principal / months;
+            const firstInterest = principal * monthlyRate;
+            return principalPayment + firstInterest;
+        }
+
+        // DSR 계산 함수
+        function calculateDSR() {
+            const annualIncome = parseInt(document.getElementById('annualIncome').value) || 0;
+            const existingLoan = parseInt(document.getElementById('existingLoan').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 4.5;
+            const loanPeriod = parseInt(document.querySelector('input[name="loanPeriod"]:checked').value);
+            const repaymentType = document.querySelector('input[name="repaymentType"]:checked').value;
+            
+            if (annualIncome === 0) {
+                alert('연간 소득을 입력해주세요.');
+                return;
+            }
+
+            // DSR 비율 결정 (연 8천만원 초과: 50%, 이하: 40%)
+            const dsrRate = annualIncome > 80000000 ? 0.5 : 0.4;
+            
+            // 연간 상환 가능액
+            const annualRepaymentCapacity = annualIncome * dsrRate;
+            
+            // 신규 대출 가능 연간 상환액
+            const newLoanAnnualRepayment = annualRepaymentCapacity - existingLoan;
+            
+            if (newLoanAnnualRepayment <= 0) {
+                alert('기존 대출 상환액이 DSR 한도를 초과합니다. 추가 대출이 불가능합니다.');
+                return;
+            }
+
+            // 월 상환액
+            const monthlyRepayment = newLoanAnnualRepayment / 12;
+            
+            // 대출 가능 금액 역산
+            const months = loanPeriod * 12;
+            const monthlyRate = interestRate / 12 / 100;
+            
+            let maxLoan;
+            if (repaymentType === 'equal') {
+                // 원리금균등: P = M * [(1 - (1 + r)^-n) / r]
+                if (monthlyRate === 0) {
+                    maxLoan = monthlyRepayment * months;
+                } else {
+                    maxLoan = monthlyRepayment * ((1 - Math.pow(1 + monthlyRate, -months)) / monthlyRate);
+                }
+            } else {
+                // 원금균등: 첫 달 상환액 = 원금/n + 원금*r
+                // M = P/n + P*r
+                // M = P(1/n + r)
+                // P = M / (1/n + r)
+                maxLoan = monthlyRepayment / (1/months + monthlyRate);
+            }
+
+            // 총 상환액 계산
+            let totalPayment;
+            let monthlyPayment;
+            
+            if (repaymentType === 'equal') {
+                monthlyPayment = calculateMonthlyPaymentEqual(maxLoan, interestRate, months);
+                totalPayment = monthlyPayment * months;
+            } else {
+                monthlyPayment = calculateMonthlyPaymentPrincipal(maxLoan, interestRate, months);
+                // 원금균등은 매월 감소하므로 평균값 사용
+                const lastMonthPayment = maxLoan / months + (maxLoan / months) * monthlyRate;
+                totalPayment = (monthlyPayment + lastMonthPayment) / 2 * months;
+            }
+
+            const totalInterest = totalPayment - maxLoan;
+
+            // 결과 표시
+            document.getElementById('maxLoanAmount').textContent = formatKoreanCurrency(maxLoan);
+            document.getElementById('displayIncome').textContent = formatCurrency(annualIncome);
+            document.getElementById('dsrRate').textContent = (dsrRate * 100) + '%';
+            document.getElementById('annualRepayment').textContent = formatCurrency(annualRepaymentCapacity);
+            document.getElementById('displayExisting').textContent = formatCurrency(existingLoan);
+            document.getElementById('newLoanRepayment').textContent = formatCurrency(newLoanAnnualRepayment);
+            document.getElementById('monthlyPayment').textContent = formatCurrency(monthlyPayment);
+            document.getElementById('totalPayment').textContent = formatCurrency(totalPayment);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+
+            // 안내 메시지
+            let infoMessage = '';
+            if (annualIncome > 80000000) {
+                infoMessage = '연 소득 8천만원 초과로 DSR 50%가 적용됩니다. ';
+            } else {
+                infoMessage = 'DSR 40%가 적용됩니다. ';
+            }
+            infoMessage += `${loanPeriod}년 ${repaymentType === 'equal' ? '원리금균등' : '원금균등'}상환 기준입니다.`;
+            
+            document.getElementById('dsrInfo').textContent = infoMessage;
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('annualIncome').value = '';
+            document.getElementById('existingLoan').value = '0';
+            document.getElementById('interestRate').value = '4.5';
+            document.querySelector('input[name="loanPeriod"][value="30"]').checked = true;
+            document.querySelector('input[name="repaymentType"][value="equal"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const maxLoan = document.getElementById('maxLoanAmount').textContent;
+            const monthlyPayment = document.getElementById('monthlyPayment').textContent;
+            const text = `부동산계산하기에서 DSR 계산했어요!\n최대 대출 가능 금액: ${maxLoan}\n월 상환액: ${monthlyPayment}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'DSR 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>
