@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>양도소득세 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/sell" class="back-button">
+            ← 집을 팔려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📊</div>
+            <h1 class="calculator-title">양도소득세 계산기</h1>
+            <p class="calculator-subtitle">주택 매도 시 내야 할 양도세를 계산합니다</p>
+        </div>
+
+        <!-- 양도세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 양도소득세란?
+            </div>
+            <div class="info-content">
+                부동산을 팔아서 얻은 차익(양도차익)에 대해 내는 세금입니다.
+                <br><br>
+                • <strong>1세대 1주택</strong>: 일정 요건 충족 시 비과세<br>
+                • <strong>장기보유특별공제</strong>: 보유·거주 기간에 따라 최대 80% 공제<br>
+                • <strong>다주택</strong>: 중과세율 적용 (조정지역 2주택 이상)
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">거래 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">취득가액 (매수가)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="acquisitionPrice" class="input-field" placeholder="예: 400000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택을 구매한 가격</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">양도가액 (매도가)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="transferPrice" class="input-field" placeholder="예: 600000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택을 판매하는 가격</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">필요경비 (취득세, 복비 등)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="expenses" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">취득세, 중개수수료, 등기비용, 자본적 지출 등</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 주택 수 (양도 시점 기준)</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">조정대상지역 여부</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="no" checked>
+                        <span class="radio-label">일반지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="yes">
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">보유 기간</label>
+                <div class="input-wrapper">
+                    <input type="text" id="holdingYears" class="input-field" placeholder="예: 5" inputmode="numeric">
+                    <span class="input-suffix">년</span>
+                </div>
+                <div class="input-helper">주택을 보유한 기간</div>
+            </div>
+
+            <div class="input-group" id="residenceSection">
+                <label class="input-label">거주 기간 (1주택만 해당)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="residenceYears" class="input-field" placeholder="예: 3" inputmode="numeric">
+                    <span class="input-suffix">년</span>
+                </div>
+                <div class="input-helper">실제 거주한 기간 (장기보유특별공제 혜택)</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                양도소득세 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 양도소득세</div>
+                <div class="result-value" id="totalTax">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">양도차익 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도가액 (매도가)</span>
+                    <span class="breakdown-value" id="displayTransferPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득가액 (매수가)</span>
+                    <span class="breakdown-value" id="displayAcquisitionPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">필요경비</span>
+                    <span class="breakdown-value" id="displayExpenses">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">양도차익</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="capitalGain">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">과세표준 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도차익</span>
+                    <span class="breakdown-value" id="displayCapitalGain">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">장기보유특별공제 (-)</span>
+                    <span class="breakdown-value" id="longTermDeduction">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기본공제 (-250만원)</span>
+                    <span class="breakdown-value" id="basicDeduction">2,500,000원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">과세표준</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="taxBase">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">세액 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">적용 세율</span>
+                    <span class="breakdown-value" id="taxRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">산출세액</span>
+                    <span class="breakdown-value" id="calculatedTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">지방소득세 (10%)</span>
+                    <span class="breakdown-value" id="localTax">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">실수령액</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도가액</span>
+                    <span class="breakdown-value" id="finalTransferPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도소득세 (-)</span>
+                    <span class="breakdown-value" id="displayTotalTax">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">실수령액 (예상)</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="netProceeds">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="taxInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);" id="warningBox" style="display: none;">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text" id="warningText"></div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateCapitalGainsTax);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            ['acquisitionPrice', 'transferPrice', 'expenses', 'holdingYears', 'residenceYears'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            calculateCapitalGainsTax();
+                        }
+                    });
+                }
+            });
+
+            // 주택 수에 따라 거주 기간 표시/숨김
+            const housingCountInputs = document.querySelectorAll('input[name="housingCount"]');
+            housingCountInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const residenceSection = document.getElementById('residenceSection');
+                    if (this.value === '1') {
+                        residenceSection.style.display = 'block';
+                    } else {
+                        residenceSection.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 누진세율 계산
+        function calculateProgressiveTax(taxBase) {
+            let tax = 0;
+            if (taxBase <= 14000000) {
+                tax = taxBase * 0.06;
+            } else if (taxBase <= 50000000) {
+                tax = taxBase * 0.15 - 1260000;
+            } else if (taxBase <= 88000000) {
+                tax = taxBase * 0.24 - 5760000;
+            } else if (taxBase <= 150000000) {
+                tax = taxBase * 0.35 - 15440000;
+            } else if (taxBase <= 300000000) {
+                tax = taxBase * 0.38 - 19940000;
+            } else if (taxBase <= 500000000) {
+                tax = taxBase * 0.40 - 25940000;
+            } else if (taxBase <= 1000000000) {
+                tax = taxBase * 0.42 - 35940000;
+            } else {
+                tax = taxBase * 0.45 - 65940000;
+            }
+            return tax;
+        }
+
+        // 양도소득세 계산 함수
+        function calculateCapitalGainsTax() {
+            const acquisitionPrice = parseInt(document.getElementById('acquisitionPrice').value) || 0;
+            const transferPrice = parseInt(document.getElementById('transferPrice').value) || 0;
+            const expenses = parseInt(document.getElementById('expenses').value) || 0;
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+            const regulated = document.querySelector('input[name="regulated"]:checked').value === 'yes';
+            const holdingYears = parseFloat(document.getElementById('holdingYears').value) || 0;
+            const residenceYears = parseFloat(document.getElementById('residenceYears').value) || 0;
+            
+            if (acquisitionPrice === 0 || transferPrice === 0) {
+                alert('취득가액과 양도가액을 입력해주세요.');
+                return;
+            }
+
+            // 1. 양도차익 계산
+            const capitalGain = transferPrice - acquisitionPrice - expenses;
+
+            if (capitalGain <= 0) {
+                alert('양도차익이 발생하지 않아 양도소득세가 없습니다.');
+                return;
+            }
+
+            // 2. 장기보유특별공제
+            let longTermDeduction = 0;
+            let deductionRate = 0;
+
+            if (housingCount === 1) {
+                // 1주택: 보유기간 + 거주기간 혼합 공제
+                const holdingDeduction = Math.min(holdingYears * 4, 40); // 보유 연 4%씩, 최대 40%
+                const residenceDeduction = Math.min(residenceYears * 4, 40); // 거주 연 4%씩, 최대 40%
+                deductionRate = Math.min(holdingDeduction + residenceDeduction, 80); // 최대 80%
+            } else {
+                // 다주택: 보유기간만
+                deductionRate = Math.min(holdingYears * 2, 30); // 보유 연 2%씩, 최대 30%
+            }
+
+            longTermDeduction = capitalGain * (deductionRate / 100);
+
+            // 3. 기본공제 250만원
+            const basicDeductionAmount = 2500000;
+
+            // 4. 과세표준
+            let taxBase = capitalGain - longTermDeduction - basicDeductionAmount;
+            if (taxBase < 0) taxBase = 0;
+
+            // 5. 세율 적용
+            let calculatedTax = 0;
+            let effectiveRate = '';
+            let taxInfo = '';
+            let warningText = '';
+
+            if (housingCount === 1) {
+                // 1주택 일반세율
+                calculatedTax = calculateProgressiveTax(taxBase);
+                effectiveRate = '누진세율 (6~45%)';
+                taxInfo = `1주택 보유로 일반세율이 적용되며, ${deductionRate}% 장기보유특별공제를 받았습니다.`;
+            } else {
+                // 2주택 이상
+                if (regulated) {
+                    // 조정지역 중과
+                    calculatedTax = taxBase * 0.75; // 75% 중과 (기본세율 + 중과)
+                    effectiveRate = '75% (중과)';
+                    taxInfo = `조정대상지역 ${housingCount}주택으로 중과세율 75%가 적용됩니다.`;
+                    warningText = `조정지역 다주택 중과세율이 적용되어 일반세율 대비 매우 높은 세금이 부과됩니다.`;
+                } else {
+                    // 일반지역
+                    calculatedTax = calculateProgressiveTax(taxBase);
+                    // 일반 다주택 할증 (기본세율 + 20%p)
+                    calculatedTax = calculatedTax * 1.3;
+                    effectiveRate = '누진세율 + 30%';
+                    taxInfo = `일반지역 ${housingCount}주택으로 누진세율에 30% 추가 부담이 있습니다.`;
+                }
+            }
+
+            // 6. 지방소득세 (10%)
+            const localTax = calculatedTax * 0.1;
+
+            // 7. 총 양도소득세
+            const totalTax = calculatedTax + localTax;
+
+            // 8. 실수령액
+            const netProceeds = transferPrice - totalTax;
+
+            // 결과 표시
+            document.getElementById('totalTax').textContent = formatKoreanCurrency(totalTax);
+            document.getElementById('displayTransferPrice').textContent = formatCurrency(transferPrice);
+            document.getElementById('displayAcquisitionPrice').textContent = formatCurrency(acquisitionPrice);
+            document.getElementById('displayExpenses').textContent = formatCurrency(expenses);
+            document.getElementById('capitalGain').textContent = formatCurrency(capitalGain);
+            
+            document.getElementById('displayCapitalGain').textContent = formatCurrency(capitalGain);
+            document.getElementById('longTermDeduction').textContent = formatCurrency(longTermDeduction) + ` (${deductionRate}%)`;
+            document.getElementById('taxBase').textContent = formatCurrency(taxBase);
+            
+            document.getElementById('taxRate').textContent = effectiveRate;
+            document.getElementById('calculatedTax').textContent = formatCurrency(calculatedTax);
+            document.getElementById('localTax').textContent = formatCurrency(localTax);
+            
+            document.getElementById('finalTransferPrice').textContent = formatCurrency(transferPrice);
+            document.getElementById('displayTotalTax').textContent = formatCurrency(totalTax);
+            document.getElementById('netProceeds').textContent = formatCurrency(netProceeds);
+            
+            document.getElementById('taxInfo').textContent = taxInfo;
+
+            // 경고 메시지
+            const warningBox = document.getElementById('warningBox');
+            if (warningText) {
+                warningBox.style.display = 'block';
+                document.getElementById('warningText').textContent = warningText;
+            } else {
+                warningBox.style.display = 'none';
+            }
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('acquisitionPrice').value = '';
+            document.getElementById('transferPrice').value = '';
+            document.getElementById('expenses').value = '0';
+            document.getElementById('holdingYears').value = '';
+            document.getElementById('residenceYears').value = '';
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.querySelector('input[name="regulated"][value="no"]').checked = true;
+            document.getElementById('residenceSection').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const totalTax = document.getElementById('totalTax').textContent;
+            const netProceeds = document.getElementById('netProceeds').textContent;
+            const text = `부동산계산하기에서 양도소득세를 계산했어요!\n양도소득세: ${totalTax}\n실수령액: ${netProceeds}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '양도소득세 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>
