@@ -26,48 +26,114 @@
         </a>
 
         <div class="calculator-header">
-            <div class="calculator-icon-large">📋</div>
+            <div class="calculator-icon-large">🏛️</div>
             <h1 class="calculator-title">취득세 계산기</h1>
-            <p class="calculator-subtitle">주택 구매 시 내야 할 취득세를 계산합니다</p>
+            <p class="calculator-subtitle">부동산 취득 시 내야 할 세금을 계산합니다</p>
+        </div>
+
+        <!-- 취득세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 취득세란?
+            </div>
+            <div class="info-content">
+                부동산을 취득할 때 내는 지방세입니다. 취득 원인, 부동산 종류, 면적, 보유 주택 수에 따라 세율이 달라집니다.
+            </div>
         </div>
 
         <!-- 계산 입력 폼 -->
         <div class="calc-section">
-            <h2 class="calc-section-title">기본 정보</h2>
+            <h2 class="calc-section-title">취득 정보</h2>
             
             <div class="input-group">
-                <label class="input-label">매매가격</label>
+                <label class="input-label">취득 가액</label>
                 <div class="input-wrapper">
                     <input type="text" id="price" class="input-field" placeholder="예: 500000000" inputmode="numeric">
                     <span class="input-suffix">원</span>
                 </div>
-                <div class="input-helper">숫자만 입력하세요 (예: 5억 = 500000000)</div>
+                <div class="input-helper">실제 거래가격 또는 증여가액</div>
             </div>
 
             <div class="input-group">
-                <label class="input-label">주택 유형</label>
+                <label class="input-label">취득 원인</label>
                 <div class="radio-group">
                     <label class="radio-item">
-                        <input type="radio" name="housingType" value="apartment" checked>
-                        <span class="radio-label">아파트</span>
+                        <input type="radio" name="acquisitionType" value="sale" checked>
+                        <span class="radio-label">매매</span>
                     </label>
                     <label class="radio-item">
-                        <input type="radio" name="housingType" value="villa">
-                        <span class="radio-label">빌라/연립</span>
+                        <input type="radio" name="acquisitionType" value="gift">
+                        <span class="radio-label">증여</span>
                     </label>
                     <label class="radio-item">
-                        <input type="radio" name="housingType" value="house">
-                        <span class="radio-label">단독주택</span>
+                        <input type="radio" name="acquisitionType" value="inheritance">
+                        <span class="radio-label">상속</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="acquisitionType" value="original">
+                        <span class="radio-label">원시취득</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">부동산 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">부동산 종류</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="propertyType" value="house" checked>
+                        <span class="radio-label">주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="propertyType" value="officetel">
+                        <span class="radio-label">오피스텔</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="propertyType" value="farmland">
+                        <span class="radio-label">농지</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="propertyType" value="other">
+                        <span class="radio-label">그 외</span>
                     </label>
                 </div>
             </div>
 
+            <div class="input-group" id="areaSection">
+                <label class="input-label">전용면적</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="area" value="40">
+                        <span class="radio-label">40㎡ 이하</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="area" value="60">
+                        <span class="radio-label">60㎡ 이하</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="area" value="85" checked>
+                        <span class="radio-label">85㎡ 이하</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="area" value="over85">
+                        <span class="radio-label">85㎡ 초과</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">취득자 정보</h2>
+            
             <div class="input-group">
-                <label class="input-label">보유 주택 수</label>
+                <label class="input-label">보유 주택 수 (취득 후 기준)</label>
                 <div class="radio-group">
                     <label class="radio-item">
                         <input type="radio" name="housingCount" value="0" checked>
-                        <span class="radio-label">무주택 (생애최초)</span>
+                        <span class="radio-label">무주택</span>
                     </label>
                     <label class="radio-item">
                         <input type="radio" name="housingCount" value="1">
@@ -85,22 +151,80 @@
             </div>
 
             <div class="input-group">
-                <label class="input-label">조정대상지역 여부</label>
-                <div class="radio-group">
+                <label class="input-label">취득자 구분</label>
+                <div class="radio-group" style="grid-template-columns: 1fr;">
                     <label class="radio-item">
-                        <input type="radio" name="regulated" value="no" checked>
-                        <span class="radio-label">일반지역</span>
+                        <input type="radio" name="buyerType" value="individual" checked>
+                        <span class="radio-label">개인</span>
                     </label>
                     <label class="radio-item">
-                        <input type="radio" name="regulated" value="yes">
-                        <span class="radio-label">조정대상지역</span>
+                        <input type="radio" name="buyerType" value="corporation">
+                        <span class="radio-label">법인</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="buyerType" value="rental">
+                        <span class="radio-label">임대사업자</span>
                     </label>
                 </div>
-                <div class="input-helper">서울 대부분 지역 및 일부 수도권이 해당됩니다</div>
+            </div>
+
+            <div class="input-group" id="firstBuySection">
+                <label class="input-label">생애최초 주택 구입</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="firstBuy" value="no" checked>
+                        <span class="radio-label">아니오</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="firstBuy" value="yes">
+                        <span class="radio-label">예</span>
+                    </label>
+                </div>
+                <div class="input-helper">무주택 세대주가 처음으로 주택을 구입하는 경우</div>
+            </div>
+
+            <div class="input-group" id="newSupplySection">
+                <label class="input-label">최초 분양</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="newSupply" value="no" checked>
+                        <span class="radio-label">아니오 (기존주택)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="newSupply" value="yes">
+                        <span class="radio-label">예 (신축분양)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">지역 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">소재지</label>
+                <div class="radio-group" style="grid-template-columns: 1fr;">
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="regulated" checked>
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="metro">
+                        <span class="radio-label">수도권 (조정지역 제외)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="exempt">
+                        <span class="radio-label">중과 배제지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="other">
+                        <span class="radio-label">기타 지역</span>
+                    </label>
+                </div>
             </div>
 
             <button class="calc-button" id="calculateButton">
-                계산하기
+                취득세 계산하기
             </button>
         </div>
 
@@ -114,24 +238,37 @@
             </div>
 
             <div class="result-breakdown">
-                <h3 class="breakdown-title">세부 내역</h3>
+                <h3 class="breakdown-title">세액 상세</h3>
                 <div class="breakdown-item">
-                    <span class="breakdown-label">취득세</span>
+                    <span class="breakdown-label">취득가액</span>
+                    <span class="breakdown-value" id="displayPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">적용 세율</span>
+                    <span class="breakdown-value" id="taxRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득세 본세</span>
                     <span class="breakdown-value" id="baseTax">0원</span>
                 </div>
                 <div class="breakdown-item">
-                    <span class="breakdown-label">지방교육세</span>
+                    <span class="breakdown-label">지방교육세 (본세 × 10%)</span>
                     <span class="breakdown-value" id="educationTax">0원</span>
                 </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">농어촌특별세</span>
+                <div class="breakdown-item" id="ruralTaxItem">
+                    <span class="breakdown-label">농어촌특별세 (0.2%)</span>
                     <span class="breakdown-value" id="ruralTax">0원</span>
                 </div>
             </div>
 
-            <div class="result-info" id="taxRateInfo">
+            <div class="result-info">
                 <div class="info-icon">ℹ️</div>
-                <div class="info-text"></div>
+                <div class="info-text" id="taxInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);" id="warningBox">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text" id="warningText"></div>
             </div>
 
             <div class="result-actions">
@@ -148,52 +285,92 @@
     <script>
         // DOM 로드 완료 후 실행
         document.addEventListener('DOMContentLoaded', function() {
-            // 계산 버튼 이벤트
             const calculateButton = document.getElementById('calculateButton');
             if (calculateButton) {
                 calculateButton.addEventListener('click', calculateAcquisitionTax);
             }
 
-            // 리셋 버튼 이벤트
             const resetButton = document.getElementById('resetButton');
             if (resetButton) {
                 resetButton.addEventListener('click', resetCalculator);
             }
 
-            // 공유 버튼 이벤트
             const shareButton = document.getElementById('shareButton');
             if (shareButton) {
                 shareButton.addEventListener('click', shareResult);
             }
 
-            // 입력 필드 숫자 포맷팅
+            // 숫자 입력 필드
             const priceInput = document.getElementById('price');
             if (priceInput) {
                 priceInput.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/[^0-9]/g, '');
                     e.target.value = value;
                 });
-                
-                // 엔터 키로 계산
                 priceInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        calculateAcquisitionTax();
-                    }
+                    if (e.key === 'Enter') calculateAcquisitionTax();
                 });
             }
+
+            // 부동산 종류에 따라 면적 섹션 표시/숨김
+            const propertyTypeInputs = document.querySelectorAll('input[name="propertyType"]');
+            propertyTypeInputs.forEach(input => {
+                input.addEventListener('change', updateVisibility);
+            });
+
+            // 보유 주택 수에 따라 생애최초 섹션 표시/숨김
+            const housingCountInputs = document.querySelectorAll('input[name="housingCount"]');
+            housingCountInputs.forEach(input => {
+                input.addEventListener('change', updateVisibility);
+            });
+
+            // 취득자 구분에 따라 섹션 표시/숨김
+            const buyerTypeInputs = document.querySelectorAll('input[name="buyerType"]');
+            buyerTypeInputs.forEach(input => {
+                input.addEventListener('change', updateVisibility);
+            });
+
+            function updateVisibility() {
+                const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+                const housingCount = document.querySelector('input[name="housingCount"]:checked').value;
+                const buyerType = document.querySelector('input[name="buyerType"]:checked').value;
+
+                // 면적 섹션 (주택, 오피스텔만)
+                const areaSection = document.getElementById('areaSection');
+                if (propertyType === 'house' || propertyType === 'officetel') {
+                    areaSection.style.display = 'block';
+                } else {
+                    areaSection.style.display = 'none';
+                }
+
+                // 생애최초 섹션 (개인 + 무주택만)
+                const firstBuySection = document.getElementById('firstBuySection');
+                if (buyerType === 'individual' && housingCount === '0' && propertyType === 'house') {
+                    firstBuySection.style.display = 'block';
+                } else {
+                    firstBuySection.style.display = 'none';
+                }
+
+                // 최초 분양 섹션 (주택만)
+                const newSupplySection = document.getElementById('newSupplySection');
+                if (propertyType === 'house') {
+                    newSupplySection.style.display = 'block';
+                } else {
+                    newSupplySection.style.display = 'none';
+                }
+            }
+
+            updateVisibility();
         });
 
-        // 숫자 포맷팅
         function formatNumber(num) {
-            return new Intl.NumberFormat('ko-KR').format(num);
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
         }
 
-        // 원 단위 표시
         function formatCurrency(num) {
             return formatNumber(num) + '원';
         }
 
-        // 억/만 단위 표시
         function formatKoreanCurrency(num) {
             const billion = Math.floor(num / 100000000);
             const tenThousand = Math.floor((num % 100000000) / 10000);
@@ -202,112 +379,188 @@
             let result = '';
             if (billion > 0) result += billion + '억 ';
             if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
-            if (remainder > 0 || result === '') result += formatNumber(remainder);
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
             
             return result.trim() + '원';
         }
 
-        // 취득세 계산 함수
         function calculateAcquisitionTax() {
             const price = parseInt(document.getElementById('price').value) || 0;
             
             if (price === 0) {
-                alert('매매가격을 입력해주세요.');
+                alert('취득가액을 입력해주세요.');
                 return;
             }
 
-            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
-            const regulated = document.querySelector('input[name="regulated"]:checked').value;
-            
+            const acquisitionType = document.querySelector('input[name="acquisitionType"]:checked').value;
+            const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+            const area = document.querySelector('input[name="area"]:checked')?.value;
+            const housingCount = document.querySelector('input[name="housingCount"]:checked').value;
+            const buyerType = document.querySelector('input[name="buyerType"]:checked').value;
+            const firstBuy = document.querySelector('input[name="firstBuy"]:checked')?.value === 'yes';
+            const newSupply = document.querySelector('input[name="newSupply"]:checked')?.value === 'yes';
+            const location = document.querySelector('input[name="location"]:checked').value;
+
             let taxRate = 0;
-            let educationRate = 0.1; // 지방교육세 10%
-            let ruralRate = 0; // 농어촌특별세
-            let infoText = '';
+            let taxInfo = '';
+            let warningText = '';
 
             // 취득세율 결정
-            if (housingCount === 0) {
-                // 생애최초 (무주택)
-                if (price <= 150000000) {
-                    taxRate = 0.01; // 1.5억 이하: 1%
-                    infoText = '생애최초 주택 구매로 1% 세율이 적용됩니다.';
-                } else if (price <= 300000000) {
-                    taxRate = 0.01; // 1.5억~3억: 1%
-                    infoText = '생애최초 주택 구매로 1% 세율이 적용됩니다.';
-                } else if (price <= 600000000) {
-                    taxRate = 0.01; // 3억~6억: 1%
-                    infoText = '생애최초 주택 구매로 1% 세율이 적용됩니다.';
-                } else if (price <= 900000000) {
-                    taxRate = 0.02; // 6억~9억: 2%
-                    infoText = '6억 초과 주택으로 2% 세율이 적용됩니다.';
+            if (acquisitionType === 'sale') {
+                // 매매
+                if (propertyType === 'house') {
+                    // 주택
+                    if (buyerType === 'corporation') {
+                        // 법인
+                        taxRate = 0.12; // 12%
+                        taxInfo = '법인의 주택 취득: 12% 세율 적용';
+                        warningText = '법인의 주택 취득은 높은 세율이 적용됩니다.';
+                    } else if (buyerType === 'rental') {
+                        // 임대사업자
+                        taxRate = 0.01; // 1%
+                        taxInfo = '임대사업자 주택 취득: 1% 세율 적용';
+                    } else {
+                        // 개인
+                        if (firstBuy && price <= 1200000000) {
+                            // 생애최초 (12억 이하)
+                            if (price <= 600000000) {
+                                taxRate = 0.01; // 1%
+                                taxInfo = '생애최초 주택 구입 (6억 이하): 1% 세율 적용';
+                            } else if (price <= 900000000) {
+                                taxRate = 0.02; // 2%
+                                taxInfo = '생애최초 주택 구입 (6~9억): 2% 세율 적용';
+                            } else {
+                                taxRate = 0.03; // 3%
+                                taxInfo = '생애최초 주택 구입 (9~12억): 3% 세율 적용';
+                            }
+                        } else if (housingCount === '0') {
+                            // 1주택 (생애최초 아님)
+                            if (price <= 600000000) {
+                                taxRate = 0.01; // 1%
+                                taxInfo = '1주택 취득 (6억 이하): 1% 세율 적용';
+                            } else if (price <= 900000000) {
+                                taxRate = 0.02; // 2%
+                                taxInfo = '1주택 취득 (6~9억): 2% 세율 적용';
+                            } else {
+                                taxRate = 0.03; // 3%
+                                taxInfo = '1주택 취득 (9억 초과): 3% 세율 적용';
+                            }
+                        } else if (housingCount === '1') {
+                            // 2주택
+                            if (location === 'regulated') {
+                                taxRate = 0.08; // 8%
+                                taxInfo = '조정대상지역 2주택: 8% 중과세율 적용';
+                                warningText = '조정대상지역에서 2주택 취득 시 중과세율이 적용됩니다.';
+                            } else if (location === 'exempt') {
+                                taxRate = 0.01; // 1%
+                                taxInfo = '중과 배제지역 2주택: 1% 세율 적용';
+                            } else {
+                                taxRate = 0.04; // 4%
+                                taxInfo = '일반지역 2주택: 4% 세율 적용';
+                            }
+                        } else {
+                            // 3주택 이상
+                            if (location === 'regulated') {
+                                taxRate = 0.12; // 12%
+                                taxInfo = '조정대상지역 3주택 이상: 12% 중과세율 적용';
+                                warningText = '조정대상지역에서 3주택 이상 취득 시 최고세율이 적용됩니다.';
+                            } else if (location === 'exempt') {
+                                taxRate = 0.01; // 1%
+                                taxInfo = '중과 배제지역 3주택 이상: 1% 세율 적용';
+                            } else {
+                                taxRate = 0.04; // 4%
+                                taxInfo = '일반지역 3주택 이상: 4% 세율 적용';
+                            }
+                        }
+                    }
+                } else if (propertyType === 'officetel') {
+                    // 오피스텔
+                    taxRate = 0.04; // 4%
+                    taxInfo = '오피스텔 취득: 4% 세율 적용';
+                } else if (propertyType === 'farmland') {
+                    // 농지
+                    taxRate = 0.03; // 3%
+                    taxInfo = '농지 취득: 3% 세율 적용';
                 } else {
-                    taxRate = 0.03; // 9억 초과: 3%
-                    infoText = '9억 초과 주택으로 3% 세율이 적용됩니다.';
+                    // 기타 (토지, 상가 등)
+                    taxRate = 0.04; // 4%
+                    taxInfo = '토지 및 건물 취득: 4% 세율 적용';
                 }
-            } else if (housingCount === 1) {
-                // 1주택자가 2주택 되는 경우
-                if (price <= 600000000) {
-                    taxRate = 0.01; // 6억 이하: 1%
-                    infoText = '1주택에서 2주택으로, 1% 세율이 적용됩니다.';
-                } else if (price <= 900000000) {
-                    taxRate = 0.02; // 6억~9억: 2%
-                    infoText = '6억 초과 주택으로 2% 세율이 적용됩니다.';
-                } else {
-                    taxRate = 0.03; // 9억 초과: 3%
-                    infoText = '9억 초과 주택으로 3% 세율이 적용됩니다.';
-                }
-            } else if (housingCount === 2) {
-                // 2주택자가 3주택 되는 경우
-                if (regulated === 'yes') {
-                    taxRate = 0.08; // 조정대상지역: 8%
-                    infoText = '조정대상지역 3주택 취득으로 8% 중과세율이 적용됩니다.';
-                } else {
-                    taxRate = 0.04; // 일반지역: 4%
-                    infoText = '일반지역 3주택 취득으로 4% 세율이 적용됩니다.';
-                }
+            } else if (acquisitionType === 'gift') {
+                // 증여
+                taxRate = 0.035; // 3.5%
+                taxInfo = '증여로 인한 취득: 3.5% 세율 적용';
+            } else if (acquisitionType === 'inheritance') {
+                // 상속
+                taxRate = 0.028; // 2.8%
+                taxInfo = '상속으로 인한 취득: 2.8% 세율 적용';
             } else {
-                // 3주택 이상
-                if (regulated === 'yes') {
-                    taxRate = 0.12; // 조정대상지역: 12%
-                    infoText = '조정대상지역 다주택 취득으로 12% 중과세율이 적용됩니다.';
-                } else {
-                    taxRate = 0.04; // 일반지역: 4%
-                    infoText = '일반지역 다주택 취득으로 4% 세율이 적용됩니다.';
-                }
+                // 원시취득
+                taxRate = 0.028; // 2.8%
+                taxInfo = '원시취득: 2.8% 세율 적용';
             }
 
-            // 농어촌특별세 (6억 초과 주택)
-            if (price > 600000000) {
-                ruralRate = 0.002; // 0.2%
+            // 취득세 본세
+            const baseTax = price * taxRate;
+
+            // 지방교육세 (본세의 10%)
+            const educationTax = baseTax * 0.1;
+
+            // 농어촌특별세 (6억 초과 시 0.2%)
+            let ruralTax = 0;
+            let showRuralTax = false;
+            if (propertyType === 'house' && price > 600000000 && acquisitionType === 'sale') {
+                ruralTax = price * 0.002; // 0.2%
+                showRuralTax = true;
             }
 
-            // 세금 계산
-            const baseTax = Math.floor(price * taxRate);
-            const educationTax = Math.floor(baseTax * educationRate);
-            const ruralTax = Math.floor(price * ruralRate);
+            // 총 취득세
             const totalTax = baseTax + educationTax + ruralTax;
 
             // 결과 표시
             document.getElementById('totalTax').textContent = formatKoreanCurrency(totalTax);
+            document.getElementById('displayPrice').textContent = formatCurrency(price);
+            document.getElementById('taxRate').textContent = (taxRate * 100).toFixed(1) + '%';
             document.getElementById('baseTax').textContent = formatCurrency(baseTax);
             document.getElementById('educationTax').textContent = formatCurrency(educationTax);
             document.getElementById('ruralTax').textContent = formatCurrency(ruralTax);
-            document.querySelector('#taxRateInfo .info-text').textContent = infoText;
+            document.getElementById('taxInfo').textContent = taxInfo;
 
-            // 결과 섹션 표시
+            // 농특세 항목 표시/숨김
+            const ruralTaxItem = document.getElementById('ruralTaxItem');
+            if (showRuralTax) {
+                ruralTaxItem.style.display = 'flex';
+            } else {
+                ruralTaxItem.style.display = 'none';
+            }
+
+            // 경고 메시지
+            const warningBox = document.getElementById('warningBox');
+            if (warningText) {
+                warningBox.style.display = 'block';
+                document.getElementById('warningText').textContent = warningText;
+            } else {
+                warningBox.style.display = 'none';
+            }
+
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // 계산기 리셋
         function resetCalculator() {
             document.getElementById('price').value = '';
+            document.querySelector('input[name="acquisitionType"][value="sale"]').checked = true;
+            document.querySelector('input[name="propertyType"][value="house"]').checked = true;
+            document.querySelector('input[name="area"][value="85"]').checked = true;
             document.querySelector('input[name="housingCount"][value="0"]').checked = true;
-            document.querySelector('input[name="regulated"][value="no"]').checked = true;
+            document.querySelector('input[name="buyerType"][value="individual"]').checked = true;
+            document.querySelector('input[name="firstBuy"][value="no"]').checked = true;
+            document.querySelector('input[name="newSupply"][value="no"]').checked = true;
+            document.querySelector('input[name="location"][value="regulated"]').checked = true;
             document.getElementById('resultSection').style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 결과 공유
         function shareResult() {
             const totalTax = document.getElementById('totalTax').textContent;
             const text = `부동산계산하기에서 취득세를 계산했어요!\n총 취득세: ${totalTax}`;
