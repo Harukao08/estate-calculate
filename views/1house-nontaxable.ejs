@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1세대 1주택 비과세 확인 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/sell" class="back-button">
+            ← 집을 팔려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🏡</div>
+            <h1 class="calculator-title">1세대 1주택 비과세 확인</h1>
+            <p class="calculator-subtitle">양도소득세 비과세 요건 충족 여부를 확인합니다</p>
+        </div>
+
+        <!-- 비과세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 1세대 1주택 비과세란?
+            </div>
+            <div class="info-content">
+                일정 요건을 충족한 1세대 1주택자가 주택을 양도할 때 양도소득세가 면제되는 제도입니다.
+                <br><br>
+                <strong>기본 요건</strong><br>
+                • 보유기간 2년 이상<br>
+                • 거주기간 2년 이상 (2021년 이후 취득분)<br>
+                • 양도 시점에 1주택만 보유<br>
+                • 비과세 한도: 12억원 (2023년부터)
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">취득일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="acquisitionDate" class="input-field">
+                </div>
+                <div class="input-helper">주택을 취득한 날짜</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">양도 예정일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="transferDate" class="input-field">
+                </div>
+                <div class="input-helper">주택을 양도할 예정 날짜</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">실거주 시작일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="residenceStartDate" class="input-field">
+                </div>
+                <div class="input-helper">실제 거주를 시작한 날짜</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">실거주 종료일 (비워두면 양도일까지)</label>
+                <div class="input-wrapper">
+                    <input type="date" id="residenceEndDate" class="input-field">
+                </div>
+                <div class="input-helper">선택사항: 거주를 종료한 날짜</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 현황</h2>
+            
+            <div class="input-group">
+                <label class="input-label">양도 시점 보유 주택 수</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 소재지</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="general" checked>
+                        <span class="radio-label">일반지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="regulated">
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">양도가액 (예상)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="transferPrice" class="input-field" placeholder="예: 1000000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택을 판매할 예상 금액</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">세대 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">세대 구성</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="household" value="single" checked>
+                        <span class="radio-label">1세대 (독립 세대)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="household" value="multiple">
+                        <span class="radio-label">다세대 (부모 등과 동거)</span>
+                    </label>
+                </div>
+                <div class="input-helper">배우자 및 미혼 자녀와 함께 사는 독립 세대</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">세대원 중 다른 주택 보유자</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="otherHousing" value="no" checked>
+                        <span class="radio-label">없음</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="otherHousing" value="yes">
+                        <span class="radio-label">있음</span>
+                    </label>
+                </div>
+                <div class="input-helper">배우자나 미혼 자녀가 다른 주택을 보유하고 있는지</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                비과세 요건 확인하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">🏡 확인 결과</h2>
+            
+            <div class="result-card total" id="resultCard">
+                <div class="result-label">비과세 적용 여부</div>
+                <div class="result-value" id="exemptionStatus">-</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">요건 충족 현황</h3>
+                <div class="breakdown-item" id="householdStatus">
+                    <span class="breakdown-label">1세대 요건</span>
+                    <span class="breakdown-value" id="householdResult">-</span>
+                </div>
+                <div class="breakdown-item" id="housingStatus">
+                    <span class="breakdown-label">1주택 요건</span>
+                    <span class="breakdown-value" id="housingResult">-</span>
+                </div>
+                <div class="breakdown-item" id="holdingStatus">
+                    <span class="breakdown-label">보유기간 요건 (2년 이상)</span>
+                    <span class="breakdown-value" id="holdingResult">-</span>
+                </div>
+                <div class="breakdown-item" id="residenceStatus">
+                    <span class="breakdown-label">거주기간 요건 (2년 이상)</span>
+                    <span class="breakdown-value" id="residenceResult">-</span>
+                </div>
+                <div class="breakdown-item" id="priceStatus">
+                    <span class="breakdown-label">비과세 한도 (12억원)</span>
+                    <span class="breakdown-value" id="priceResult">-</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">기간 상세</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보유기간</span>
+                    <span class="breakdown-value" id="holdingPeriod">0년 0개월</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">거주기간</span>
+                    <span class="breakdown-value" id="residencePeriod">0년 0개월</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득일</span>
+                    <span class="breakdown-value" id="displayAcquisitionDate">-</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도 예정일</span>
+                    <span class="breakdown-value" id="displayTransferDate">-</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown" id="taxSection" style="display: none;">
+                <h3 class="breakdown-title">비과세 금액</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도가액</span>
+                    <span class="breakdown-value" id="displayTransferPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">비과세 한도</span>
+                    <span class="breakdown-value" id="exemptionLimit">12억원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">비과세 금액</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="exemptionAmount">0원</span>
+                </div>
+                <div class="breakdown-item" id="excessAmountItem" style="display: none;">
+                    <span class="breakdown-label">과세 대상 금액 (12억 초과분)</span>
+                    <span class="breakdown-value" id="excessAmount">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info" id="mainInfo">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);" id="warningBox" style="display: none;">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text" id="warningText"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>비과세 활용 팁</strong><br>
+                    • 보유·거주기간은 하루라도 차이나면 비과세 불가능<br>
+                    • 2년 충족 직전 매도는 피하고 여유있게 계획<br>
+                    • 조정지역은 2년→3년으로 강화될 수 있으니 주의<br>
+                    • 12억 초과분은 양도세 부과되므로 가격 협상 시 고려
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 확인하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 오늘 날짜 기본값 설정
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transferDate').value = today;
+
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', checkExemption);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드
+            const transferPriceInput = document.getElementById('transferPrice');
+            if (transferPriceInput) {
+                transferPriceInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+                transferPriceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') checkExemption();
+                });
+            }
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculatePeriod(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            const diffTime = end - start;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            const days = diffDays % 30;
+            
+            return {
+                years: years,
+                months: months,
+                days: days,
+                totalDays: diffDays,
+                totalYears: diffDays / 365
+            };
+        }
+
+        function checkExemption() {
+            const acquisitionDate = document.getElementById('acquisitionDate').value;
+            const transferDate = document.getElementById('transferDate').value;
+            const residenceStartDate = document.getElementById('residenceStartDate').value;
+            let residenceEndDate = document.getElementById('residenceEndDate').value;
+            
+            if (!acquisitionDate || !transferDate || !residenceStartDate) {
+                alert('취득일, 양도일, 거주 시작일을 모두 입력해주세요.');
+                return;
+            }
+
+            // 거주 종료일이 없으면 양도일로 설정
+            if (!residenceEndDate) {
+                residenceEndDate = transferDate;
+            }
+
+            const housingCount = document.querySelector('input[name="housingCount"]:checked').value;
+            const location = document.querySelector('input[name="location"]:checked').value;
+            const transferPrice = parseInt(document.getElementById('transferPrice').value) || 0;
+            const household = document.querySelector('input[name="household"]:checked').value;
+            const otherHousing = document.querySelector('input[name="otherHousing"]:checked').value;
+
+            // 기간 계산
+            const holdingPeriod = calculatePeriod(acquisitionDate, transferDate);
+            const residencePeriod = calculatePeriod(residenceStartDate, residenceEndDate);
+
+            // 요건 체크
+            const isHouseholdOk = household === 'single' && otherHousing === 'no';
+            const isHousingOk = housingCount === '1';
+            const isHoldingOk = holdingPeriod.totalYears >= 2;
+            
+            // 거주기간 요건 (2021년 이후 취득분은 2년 이상 필요)
+            const acquisitionYear = new Date(acquisitionDate).getFullYear();
+            let residenceRequired = acquisitionYear >= 2021;
+            let isResidenceOk = true;
+            if (residenceRequired) {
+                isResidenceOk = residencePeriod.totalYears >= 2;
+            }
+
+            // 조정지역 추가 요건 (필요시)
+            // 현재는 일반 요건만 체크
+
+            // 비과세 한도
+            const exemptionLimit = 1200000000; // 12억
+            const isPriceOk = transferPrice <= exemptionLimit;
+
+            // 전체 요건 충족 여부
+            const isFullyExempt = isHouseholdOk && isHousingOk && isHoldingOk && isResidenceOk && isPriceOk;
+
+            // 부분 비과세 (12억 초과)
+            const isPartialExempt = isHouseholdOk && isHousingOk && isHoldingOk && isResidenceOk && transferPrice > exemptionLimit;
+
+            // 결과 카드 색상
+            const resultCard = document.getElementById('resultCard');
+            if (isFullyExempt) {
+                resultCard.style.background = 'linear-gradient(135deg, #00D9B5 0%, #00B894 100%)';
+                document.getElementById('exemptionStatus').textContent = '✓ 완전 비과세';
+            } else if (isPartialExempt) {
+                resultCard.style.background = 'linear-gradient(135deg, #FFB800 0%, #FFA000 100%)';
+                document.getElementById('exemptionStatus').textContent = '△ 부분 비과세';
+            } else {
+                resultCard.style.background = 'linear-gradient(135deg, #FF5733 0%, #C70039 100%)';
+                document.getElementById('exemptionStatus').textContent = '✗ 과세 대상';
+            }
+
+            // 개별 요건 결과
+            document.getElementById('householdResult').textContent = isHouseholdOk ? '✓ 충족' : '✗ 미충족';
+            document.getElementById('householdResult').style.color = isHouseholdOk ? 'var(--secondary)' : '#FF5733';
+
+            document.getElementById('housingResult').textContent = isHousingOk ? '✓ 충족' : '✗ 미충족';
+            document.getElementById('housingResult').style.color = isHousingOk ? 'var(--secondary)' : '#FF5733';
+
+            document.getElementById('holdingResult').textContent = isHoldingOk ? 
+                `✓ 충족 (${holdingPeriod.years}년 ${holdingPeriod.months}개월)` : 
+                `✗ 미충족 (${holdingPeriod.years}년 ${holdingPeriod.months}개월)`;
+            document.getElementById('holdingResult').style.color = isHoldingOk ? 'var(--secondary)' : '#FF5733';
+
+            if (residenceRequired) {
+                document.getElementById('residenceResult').textContent = isResidenceOk ? 
+                    `✓ 충족 (${residencePeriod.years}년 ${residencePeriod.months}개월)` : 
+                    `✗ 미충족 (${residencePeriod.years}년 ${residencePeriod.months}개월)`;
+                document.getElementById('residenceResult').style.color = isResidenceOk ? 'var(--secondary)' : '#FF5733';
+            } else {
+                document.getElementById('residenceResult').textContent = '해당 없음 (2021년 이전 취득)';
+                document.getElementById('residenceResult').style.color = 'var(--text-secondary)';
+            }
+
+            document.getElementById('priceResult').textContent = isPriceOk ? 
+                '✓ 한도 내' : 
+                `△ 한도 초과 (${formatKoreanCurrency(transferPrice - exemptionLimit)} 과세)`;
+            document.getElementById('priceResult').style.color = isPriceOk ? 'var(--secondary)' : '#FFB800';
+
+            // 기간 상세
+            document.getElementById('holdingPeriod').textContent = 
+                `${holdingPeriod.years}년 ${holdingPeriod.months}개월 ${holdingPeriod.days}일`;
+            document.getElementById('residencePeriod').textContent = 
+                `${residencePeriod.years}년 ${residencePeriod.months}개월 ${residencePeriod.days}일`;
+            document.getElementById('displayAcquisitionDate').textContent = acquisitionDate;
+            document.getElementById('displayTransferDate').textContent = transferDate;
+
+            // 비과세 금액 계산
+            if (transferPrice > 0) {
+                document.getElementById('taxSection').style.display = 'block';
+                document.getElementById('displayTransferPrice').textContent = formatCurrency(transferPrice);
+                
+                if (isFullyExempt) {
+                    document.getElementById('exemptionAmount').textContent = formatCurrency(transferPrice);
+                    document.getElementById('excessAmountItem').style.display = 'none';
+                } else if (isPartialExempt) {
+                    document.getElementById('exemptionAmount').textContent = formatCurrency(exemptionLimit);
+                    document.getElementById('excessAmountItem').style.display = 'flex';
+                    document.getElementById('excessAmount').textContent = formatCurrency(transferPrice - exemptionLimit);
+                } else {
+                    document.getElementById('exemptionAmount').textContent = '0원';
+                    document.getElementById('excessAmountItem').style.display = 'flex';
+                    document.getElementById('excessAmount').textContent = formatCurrency(transferPrice);
+                }
+            } else {
+                document.getElementById('taxSection').style.display = 'none';
+            }
+
+            // 안내 메시지
+            let resultInfo = '';
+            let warningText = '';
+
+            if (isFullyExempt) {
+                resultInfo = '모든 요건을 충족하여 양도소득세가 완전 비과세됩니다. 양도가액 전액이 비과세 대상입니다.';
+            } else if (isPartialExempt) {
+                resultInfo = `기본 요건은 충족하나 양도가액이 12억원을 초과합니다. 12억원까지는 비과세되고, 초과분 ${formatKoreanCurrency(transferPrice - exemptionLimit)}에 대해서만 양도세가 부과됩니다.`;
+            } else {
+                resultInfo = '비과세 요건을 충족하지 못하여 양도소득세가 부과됩니다.';
+                
+                // 미충족 항목 안내
+                const failures = [];
+                if (!isHouseholdOk) failures.push('1세대 요건');
+                if (!isHousingOk) failures.push('1주택 요건');
+                if (!isHoldingOk) failures.push('보유기간 2년');
+                if (residenceRequired && !isResidenceOk) failures.push('거주기간 2년');
+                
+                if (failures.length > 0) {
+                    warningText = `미충족 항목: ${failures.join(', ')}. 해당 요건을 충족해야 비과세 적용이 가능합니다.`;
+                }
+
+                // 부족한 기간 안내
+                if (!isHoldingOk) {
+                    const daysNeeded = Math.ceil((2 * 365) - holdingPeriod.totalDays);
+                    warningText += ` 보유기간이 약 ${Math.ceil(daysNeeded / 30)}개월 부족합니다.`;
+                }
+                if (residenceRequired && !isResidenceOk) {
+                    const daysNeeded = Math.ceil((2 * 365) - residencePeriod.totalDays);
+                    warningText += ` 거주기간이 약 ${Math.ceil(daysNeeded / 30)}개월 부족합니다.`;
+                }
+            }
+
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            const warningBox = document.getElementById('warningBox');
+            if (warningText) {
+                warningBox.style.display = 'block';
+                document.getElementById('warningText').textContent = warningText;
+            } else {
+                warningBox.style.display = 'none';
+            }
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('acquisitionDate').value = '';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transferDate').value = today;
+            document.getElementById('residenceStartDate').value = '';
+            document.getElementById('residenceEndDate').value = '';
+            document.getElementById('transferPrice').value = '';
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.querySelector('input[name="location"][value="general"]').checked = true;
+            document.querySelector('input[name="household"][value="single"]').checked = true;
+            document.querySelector('input[name="otherHousing"][value="no"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const status = document.getElementById('exemptionStatus').textContent;
+            const holdingPeriod = document.getElementById('holdingPeriod').textContent;
+            const residencePeriod = document.getElementById('residencePeriod').textContent;
+            const text = `부동산계산하기에서 1세대 1주택 비과세를 확인했어요!\n결과: ${status}\n보유기간: ${holdingPeriod}\n거주기간: ${residencePeriod}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '1세대 1주택 비과세 확인 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

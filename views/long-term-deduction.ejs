@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장기보유특별공제 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/sell" class="back-button">
+            ← 집을 팔려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📅</div>
+            <h1 class="calculator-title">장기보유특별공제 계산기</h1>
+            <p class="calculator-subtitle">보유·거주 기간에 따른 공제율을 계산합니다</p>
+        </div>
+
+        <!-- 장기보유특별공제 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 장기보유특별공제란?
+            </div>
+            <div class="info-content">
+                주택을 오래 보유·거주할수록 양도차익에서 더 많이 공제해주는 제도입니다.
+                <br><br>
+                • <strong>1주택자</strong>: 보유기간 + 거주기간 혼합 (최대 80%)<br>
+                &nbsp;&nbsp;- 보유: 연 4%씩 최대 40% (10년)<br>
+                &nbsp;&nbsp;- 거주: 연 4%씩 최대 40% (10년)<br>
+                • <strong>다주택자</strong>: 보유기간만 (최대 30%)<br>
+                &nbsp;&nbsp;- 보유: 연 2%씩 최대 30% (15년)
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">기간 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">취득일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="acquisitionDate" class="input-field">
+                </div>
+                <div class="input-helper">주택을 취득한 날짜</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">양도 예정일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="transferDate" class="input-field">
+                </div>
+                <div class="input-helper">주택을 양도할 예정 날짜</div>
+            </div>
+
+            <div class="input-group" id="residenceSection">
+                <label class="input-label">실거주 시작일</label>
+                <div class="input-wrapper">
+                    <input type="date" id="residenceStartDate" class="input-field">
+                </div>
+                <div class="input-helper">실제 거주를 시작한 날짜 (1주택만 해당)</div>
+            </div>
+
+            <div class="input-group" id="residenceEndSection">
+                <label class="input-label">실거주 종료일 (선택)</label>
+                <div class="input-wrapper">
+                    <input type="date" id="residenceEndDate" class="input-field">
+                </div>
+                <div class="input-helper">비워두면 양도일까지 거주한 것으로 계산</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 주택 수</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">양도차익 (선택)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="capitalGain" class="input-field" placeholder="0" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">양도차익을 입력하면 실제 공제 금액을 계산합니다</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                장기보유특별공제 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">📅 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 공제율</div>
+                <div class="result-value" id="totalDeductionRate">0%</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">보유기간 공제</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보유기간</span>
+                    <span class="breakdown-value" id="holdingPeriod">0년 0개월</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보유기간 공제율</span>
+                    <span class="breakdown-value" id="holdingDeductionRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">계산 방식</span>
+                    <span class="breakdown-value" id="holdingFormula">-</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown" id="residenceSection">
+                <h3 class="breakdown-title">거주기간 공제 (1주택만 해당)</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">거주기간</span>
+                    <span class="breakdown-value" id="residencePeriod">0년 0개월</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">거주기간 공제율</span>
+                    <span class="breakdown-value" id="residenceDeductionRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">계산 방식</span>
+                    <span class="breakdown-value" id="residenceFormula">-</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">공제 요약</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보유기간 공제</span>
+                    <span class="breakdown-value" id="displayHoldingRate">0%</span>
+                </div>
+                <div class="breakdown-item" id="displayResidenceItem">
+                    <span class="breakdown-label">거주기간 공제</span>
+                    <span class="breakdown-value" id="displayResidenceRate">0%</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">총 공제율</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="displayTotalRate">0%</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown" id="amountSection" style="display: none;">
+                <h3 class="breakdown-title">공제 금액</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도차익</span>
+                    <span class="breakdown-value" id="displayCapitalGain">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">공제율</span>
+                    <span class="breakdown-value" id="deductionRateForAmount">0%</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--primary);">공제 금액</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="deductionAmount">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">공제 후 과세 대상</span>
+                    <span class="breakdown-value" id="taxableAmount">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">기간별 공제율 변화</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">현재 (보유 <span id="currentYears">0</span>년)</span>
+                    <span class="breakdown-value" id="currentRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">+1년 후</span>
+                    <span class="breakdown-value" id="nextYearRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">+2년 후</span>
+                    <span class="breakdown-value" id="twoYearsRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">최대 공제율 달성까지</span>
+                    <span class="breakdown-value" id="maxDeductionYear">-</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>공제율 극대화 전략</strong><br>
+                    • 1주택: 보유·거주 모두 10년 이상 → 80% 공제<br>
+                    • 다주택: 보유 15년 이상 → 30% 공제<br>
+                    • 1년 더 보유 시 공제율 증가 효과 확인<br>
+                    • 거주기간 증명 자료 반드시 보관 (주민등록등본, 공과금)
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 오늘 날짜 기본값
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transferDate').value = today;
+
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateDeduction);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력
+            const capitalGainInput = document.getElementById('capitalGain');
+            if (capitalGainInput) {
+                capitalGainInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+            }
+
+            // 주택 수에 따라 거주 섹션 표시
+            const housingCountInputs = document.querySelectorAll('input[name="housingCount"]');
+            housingCountInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const residenceSection = document.getElementById('residenceSection');
+                    const residenceEndSection = document.getElementById('residenceEndSection');
+                    if (this.value === '1') {
+                        residenceSection.style.display = 'block';
+                        residenceEndSection.style.display = 'block';
+                    } else {
+                        residenceSection.style.display = 'none';
+                        residenceEndSection.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculatePeriod(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            const diffTime = end - start;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            const days = diffDays % 30;
+            
+            return {
+                years: years,
+                months: months,
+                days: days,
+                totalDays: diffDays,
+                totalYears: diffDays / 365
+            };
+        }
+
+        function calculateDeduction() {
+            const acquisitionDate = document.getElementById('acquisitionDate').value;
+            const transferDate = document.getElementById('transferDate').value;
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+            const capitalGain = parseInt(document.getElementById('capitalGain').value) || 0;
+            
+            if (!acquisitionDate || !transferDate) {
+                alert('취득일과 양도 예정일을 입력해주세요.');
+                return;
+            }
+
+            // 보유기간 계산
+            const holdingPeriod = calculatePeriod(acquisitionDate, transferDate);
+
+            // 거주기간 계산 (1주택만)
+            let residencePeriod = { years: 0, months: 0, days: 0, totalYears: 0 };
+            if (housingCount === 1) {
+                const residenceStartDate = document.getElementById('residenceStartDate').value;
+                let residenceEndDate = document.getElementById('residenceEndDate').value;
+                
+                if (residenceStartDate) {
+                    if (!residenceEndDate) {
+                        residenceEndDate = transferDate;
+                    }
+                    residencePeriod = calculatePeriod(residenceStartDate, residenceEndDate);
+                }
+            }
+
+            // 공제율 계산
+            let holdingDeductionRate = 0;
+            let residenceDeductionRate = 0;
+
+            if (housingCount === 1) {
+                // 1주택: 보유 연 4%, 거주 연 4%
+                holdingDeductionRate = Math.min(holdingPeriod.totalYears * 4, 40);
+                residenceDeductionRate = Math.min(residencePeriod.totalYears * 4, 40);
+            } else {
+                // 다주택: 보유 연 2%
+                holdingDeductionRate = Math.min(holdingPeriod.totalYears * 2, 30);
+                residenceDeductionRate = 0;
+            }
+
+            const totalDeductionRate = Math.min(holdingDeductionRate + residenceDeductionRate, 
+                                                 housingCount === 1 ? 80 : 30);
+
+            // 공제 금액 계산
+            let deductionAmount = 0;
+            let taxableAmount = 0;
+            if (capitalGain > 0) {
+                deductionAmount = capitalGain * (totalDeductionRate / 100);
+                taxableAmount = capitalGain - deductionAmount;
+            }
+
+            // 미래 공제율 계산
+            const futureHolding1 = Math.min((holdingPeriod.totalYears + 1) * (housingCount === 1 ? 4 : 2), 
+                                            housingCount === 1 ? 40 : 30);
+            const futureResidence1 = housingCount === 1 ? 
+                                     Math.min((residencePeriod.totalYears + 1) * 4, 40) : 0;
+            const nextYearRate = Math.min(futureHolding1 + futureResidence1, housingCount === 1 ? 80 : 30);
+
+            const futureHolding2 = Math.min((holdingPeriod.totalYears + 2) * (housingCount === 1 ? 4 : 2), 
+                                            housingCount === 1 ? 40 : 30);
+            const futureResidence2 = housingCount === 1 ? 
+                                     Math.min((residencePeriod.totalYears + 2) * 4, 40) : 0;
+            const twoYearsRate = Math.min(futureHolding2 + futureResidence2, housingCount === 1 ? 80 : 30);
+
+            // 최대 공제율 달성까지
+            const maxRate = housingCount === 1 ? 80 : 30;
+            let maxDeductionYear = '-';
+            if (totalDeductionRate < maxRate) {
+                if (housingCount === 1) {
+                    const yearsToMax = Math.ceil((maxRate - totalDeductionRate) / 8); // 보유+거주 합산 연 8%
+                    maxDeductionYear = `약 ${yearsToMax}년 후 (${maxRate}% 달성)`;
+                } else {
+                    const yearsToMax = Math.ceil((maxRate - totalDeductionRate) / 2);
+                    maxDeductionYear = `약 ${yearsToMax}년 후 (${maxRate}% 달성)`;
+                }
+            } else {
+                maxDeductionYear = '이미 최대 공제율 달성';
+            }
+
+            // 결과 표시
+            document.getElementById('totalDeductionRate').textContent = totalDeductionRate.toFixed(0) + '%';
+            
+            document.getElementById('holdingPeriod').textContent = 
+                `${holdingPeriod.years}년 ${holdingPeriod.months}개월 ${holdingPeriod.days}일`;
+            document.getElementById('holdingDeductionRate').textContent = holdingDeductionRate.toFixed(1) + '%';
+            
+            if (housingCount === 1) {
+                document.getElementById('holdingFormula').textContent = 
+                    `${holdingPeriod.years}년 × 4% = ${holdingDeductionRate.toFixed(1)}% (최대 40%)`;
+                
+                document.getElementById('residencePeriod').textContent = 
+                    `${residencePeriod.years}년 ${residencePeriod.months}개월 ${residencePeriod.days}일`;
+                document.getElementById('residenceDeductionRate').textContent = residenceDeductionRate.toFixed(1) + '%';
+                document.getElementById('residenceFormula').textContent = 
+                    `${residencePeriod.years}년 × 4% = ${residenceDeductionRate.toFixed(1)}% (최대 40%)`;
+                
+                document.getElementById('displayResidenceItem').style.display = 'flex';
+                document.getElementById('displayResidenceRate').textContent = residenceDeductionRate.toFixed(1) + '%';
+            } else {
+                document.getElementById('holdingFormula').textContent = 
+                    `${holdingPeriod.years}년 × 2% = ${holdingDeductionRate.toFixed(1)}% (최대 30%)`;
+                
+                document.getElementById('displayResidenceItem').style.display = 'none';
+            }
+            
+            document.getElementById('displayHoldingRate').textContent = holdingDeductionRate.toFixed(1) + '%';
+            document.getElementById('displayTotalRate').textContent = totalDeductionRate.toFixed(0) + '%';
+
+            // 공제 금액
+            if (capitalGain > 0) {
+                document.getElementById('amountSection').style.display = 'block';
+                document.getElementById('displayCapitalGain').textContent = formatCurrency(capitalGain);
+                document.getElementById('deductionRateForAmount').textContent = totalDeductionRate.toFixed(0) + '%';
+                document.getElementById('deductionAmount').textContent = formatCurrency(deductionAmount);
+                document.getElementById('taxableAmount').textContent = formatCurrency(taxableAmount);
+            } else {
+                document.getElementById('amountSection').style.display = 'none';
+            }
+
+            // 미래 공제율
+            document.getElementById('currentYears').textContent = holdingPeriod.years;
+            document.getElementById('currentRate').textContent = totalDeductionRate.toFixed(0) + '%';
+            document.getElementById('nextYearRate').textContent = 
+                nextYearRate.toFixed(0) + '% (▲' + (nextYearRate - totalDeductionRate).toFixed(1) + '%p)';
+            document.getElementById('twoYearsRate').textContent = 
+                twoYearsRate.toFixed(0) + '% (▲' + (twoYearsRate - totalDeductionRate).toFixed(1) + '%p)';
+            document.getElementById('maxDeductionYear').textContent = maxDeductionYear;
+
+            // 안내 메시지
+            let resultInfo = '';
+            if (housingCount === 1) {
+                resultInfo = `1주택으로 보유 ${holdingDeductionRate.toFixed(1)}% + 거주 ${residenceDeductionRate.toFixed(1)}% = 총 ${totalDeductionRate.toFixed(0)}% 공제율이 적용됩니다.`;
+                if (totalDeductionRate < 80) {
+                    resultInfo += ` 보유·거주를 계속하면 공제율이 더 증가합니다.`;
+                } else {
+                    resultInfo += ` 이미 최대 공제율 80%를 달성했습니다!`;
+                }
+            } else {
+                resultInfo = `다주택으로 보유 ${holdingDeductionRate.toFixed(1)}% 공제율이 적용됩니다 (거주기간 공제 없음).`;
+                if (totalDeductionRate < 30) {
+                    resultInfo += ` 15년 보유 시 최대 30%까지 공제 가능합니다.`;
+                } else {
+                    resultInfo += ` 이미 최대 공제율 30%를 달성했습니다.`;
+                }
+            }
+
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('acquisitionDate').value = '';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transferDate').value = today;
+            document.getElementById('residenceStartDate').value = '';
+            document.getElementById('residenceEndDate').value = '';
+            document.getElementById('capitalGain').value = '';
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.getElementById('residenceSection').style.display = 'block';
+            document.getElementById('residenceEndSection').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const totalRate = document.getElementById('totalDeductionRate').textContent;
+            const holdingPeriod = document.getElementById('holdingPeriod').textContent;
+            const text = `부동산계산하기에서 장기보유특별공제를 계산했어요!\n총 공제율: ${totalRate}\n보유기간: ${holdingPeriod}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '장기보유특별공제 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

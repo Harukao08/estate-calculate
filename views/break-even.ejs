@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>손익분기점 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/sell" class="back-button">
+            ← 집을 팔려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">⚖️</div>
+            <h1 class="calculator-title">손익분기점 계산기</h1>
+            <p class="calculator-subtitle">손해 보지 않는 최저 매도가를 계산합니다</p>
+        </div>
+
+        <!-- 손익분기점 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 손익분기점이란?
+            </div>
+            <div class="info-content">
+                투자한 돈을 모두 회수할 수 있는 최소 판매가격입니다.
+                <br><br>
+                <strong>손익분기점 매도가 = 총 투자비용 + 매도 비용 + 양도세</strong>
+                <br><br>
+                취득 비용, 대출 이자, 보유 비용 등을 모두 고려하여 
+                최소한 이 가격 이상으로 팔아야 손해를 보지 않습니다.
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">취득 비용</h2>
+            
+            <div class="input-group">
+                <label class="input-label">당초 취득가 (매수가)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="purchasePrice" class="input-field" placeholder="예: 500000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택을 구매했던 가격</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">취득세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="acquisitionTax" class="input-field" placeholder="예: 5000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">중개수수료 (매수 시)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="buyBrokerage" class="input-field" placeholder="예: 2000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">등기비용</label>
+                <div class="input-wrapper">
+                    <input type="text" id="registrationFee" class="input-field" placeholder="예: 1000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">기타 취득 비용</label>
+                <div class="input-wrapper">
+                    <input type="text" id="otherAcquisitionCost" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">인테리어, 수리비 등</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">보유 비용 (누적)</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 기간</label>
+                <div class="input-wrapper">
+                    <input type="text" id="holdingYears" class="input-field" placeholder="예: 5" inputmode="numeric">
+                    <span class="input-suffix">년</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">연간 재산세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="propertyTax" class="input-field" placeholder="예: 1500000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">연간 관리비 (아파트)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="maintenanceFee" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">월 관리비 × 12개월</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">대출 이자 (누적)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="loanInterest" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">보유 기간 동안 납부한 총 이자</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">매도 예상 비용</h2>
+            
+            <div class="input-group">
+                <label class="input-label">중개수수료율 (매도 시)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="sellBrokerageRate" class="input-field" placeholder="0.4" inputmode="decimal" value="0.4">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">서울시 기준: 2~9억 0.4%, 9~12억 0.5%</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">기타 매도 비용</label>
+                <div class="input-wrapper">
+                    <input type="text" id="otherSellCost" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">말소등기, 이사비용 등</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">양도세 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 주택 수</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">조정대상지역 여부</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="no" checked>
+                        <span class="radio-label">일반지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="yes">
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group" id="residenceSection">
+                <label class="input-label">거주 기간 (1주택만)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="residenceYears" class="input-field" placeholder="예: 3" inputmode="numeric">
+                    <span class="input-suffix">년</span>
+                </div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                손익분기점 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">⚖️ 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">손익분기점 매도가</div>
+                <div class="result-value" id="breakEvenPrice">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">총 투자 비용</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득가</span>
+                    <span class="breakdown-value" id="displayPurchasePrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득세</span>
+                    <span class="breakdown-value" id="displayAcquisitionTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">중개수수료 (매수)</span>
+                    <span class="breakdown-value" id="displayBuyBrokerage">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">등기비용</span>
+                    <span class="breakdown-value" id="displayRegistrationFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 취득 비용</span>
+                    <span class="breakdown-value" id="displayOtherAcquisition">0원</span>
+                </div>
+                <div class="breakdown-item" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">취득 비용 소계</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="totalAcquisitionCost">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">보유 비용 (누적)</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">재산세 (누적)</span>
+                    <span class="breakdown-value" id="totalPropertyTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">관리비 (누적)</span>
+                    <span class="breakdown-value" id="totalMaintenanceFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">대출 이자 (누적)</span>
+                    <span class="breakdown-value" id="displayLoanInterest">0원</span>
+                </div>
+                <div class="breakdown-item" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">보유 비용 소계</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="totalHoldingCost">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">총 투자금</h3>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700;">총 투자금 (회수 필요액)</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="totalInvestment">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">예상 매도 비용</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">중개수수료 (매도)</span>
+                    <span class="breakdown-value" id="sellBrokerage">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">양도소득세 (예상)</span>
+                    <span class="breakdown-value" id="estimatedCapitalGainsTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 매도 비용</span>
+                    <span class="breakdown-value" id="displayOtherSellCost">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>손익분기점 활용 팁</strong><br>
+                    • 매도가 협상 시 최저 가격 기준으로 활용<br>
+                    • 이 가격 이상으로 팔아야 손해 없음<br>
+                    • 실제 목표가는 이 가격 + 원하는 수익 설정<br>
+                    • 시세가 손익분기점 미만이면 매도 시기 재검토
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateBreakEven);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드
+            const numericInputs = ['purchasePrice', 'acquisitionTax', 'buyBrokerage', 'registrationFee', 
+                                   'otherAcquisitionCost', 'holdingYears', 'propertyTax', 'maintenanceFee', 
+                                   'loanInterest', 'sellBrokerageRate', 'otherSellCost', 'residenceYears'];
+            numericInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') calculateBreakEven();
+                    });
+                }
+            });
+
+            // 주택 수에 따라 거주 기간 표시
+            const housingCountInputs = document.querySelectorAll('input[name="housingCount"]');
+            housingCountInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const residenceSection = document.getElementById('residenceSection');
+                    if (this.value === '1') {
+                        residenceSection.style.display = 'block';
+                    } else {
+                        residenceSection.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculateBreakEven() {
+            // 입력값 가져오기
+            const purchasePrice = parseInt(document.getElementById('purchasePrice').value) || 0;
+            const acquisitionTax = parseInt(document.getElementById('acquisitionTax').value) || 0;
+            const buyBrokerage = parseInt(document.getElementById('buyBrokerage').value) || 0;
+            const registrationFee = parseInt(document.getElementById('registrationFee').value) || 0;
+            const otherAcquisitionCost = parseInt(document.getElementById('otherAcquisitionCost').value) || 0;
+            
+            const holdingYears = parseFloat(document.getElementById('holdingYears').value) || 0;
+            const propertyTax = parseInt(document.getElementById('propertyTax').value) || 0;
+            const maintenanceFee = parseInt(document.getElementById('maintenanceFee').value) || 0;
+            const loanInterest = parseInt(document.getElementById('loanInterest').value) || 0;
+            
+            const sellBrokerageRate = parseFloat(document.getElementById('sellBrokerageRate').value) || 0.4;
+            const otherSellCost = parseInt(document.getElementById('otherSellCost').value) || 0;
+            
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+            const regulated = document.querySelector('input[name="regulated"]:checked').value === 'yes';
+            const residenceYears = parseFloat(document.getElementById('residenceYears').value) || 0;
+            
+            if (purchasePrice === 0) {
+                alert('취득가를 입력해주세요.');
+                return;
+            }
+
+            // 1. 총 취득 비용
+            const totalAcquisitionCost = purchasePrice + acquisitionTax + buyBrokerage + registrationFee + otherAcquisitionCost;
+
+            // 2. 총 보유 비용
+            const totalPropertyTax = propertyTax * holdingYears;
+            const totalMaintenanceFee = maintenanceFee * holdingYears;
+            const totalHoldingCost = totalPropertyTax + totalMaintenanceFee + loanInterest;
+
+            // 3. 총 투자금
+            const totalInvestment = totalAcquisitionCost + totalHoldingCost;
+
+            // 4. 손익분기점 계산 (역산)
+            // 손익분기점 = 총투자금 + 중개수수료 + 양도세 + 기타비용
+            // 양도세는 매도가에 따라 달라지므로 반복 계산 필요
+            
+            let breakEvenPrice = totalInvestment;
+            let previousPrice = 0;
+            let iterations = 0;
+            const maxIterations = 100;
+
+            // 반복 계산으로 손익분기점 찾기
+            while (Math.abs(breakEvenPrice - previousPrice) > 1000 && iterations < maxIterations) {
+                previousPrice = breakEvenPrice;
+                
+                // 중개수수료 계산
+                const sellBrokerage = breakEvenPrice * (sellBrokerageRate / 100);
+                
+                // 양도차익
+                const capitalGain = breakEvenPrice - purchasePrice - acquisitionTax - buyBrokerage - registrationFee;
+                
+                // 장기보유특별공제
+                let deductionRate = 0;
+                if (housingCount === 1) {
+                    const holdingDeduction = Math.min(holdingYears * 4, 40);
+                    const residenceDeduction = Math.min(residenceYears * 4, 40);
+                    deductionRate = Math.min(holdingDeduction + residenceDeduction, 80);
+                } else {
+                    deductionRate = Math.min(holdingYears * 2, 30);
+                }
+                const longTermDeduction = capitalGain * (deductionRate / 100);
+                
+                // 과세표준
+                let taxBase = capitalGain - longTermDeduction - 2500000;
+                if (taxBase < 0) taxBase = 0;
+                
+                // 양도세 계산
+                let calculatedTax = 0;
+                if (housingCount === 1) {
+                    // 누진세율
+                    if (taxBase <= 14000000) {
+                        calculatedTax = taxBase * 0.06;
+                    } else if (taxBase <= 50000000) {
+                        calculatedTax = taxBase * 0.15 - 1260000;
+                    } else if (taxBase <= 88000000) {
+                        calculatedTax = taxBase * 0.24 - 5760000;
+                    } else if (taxBase <= 150000000) {
+                        calculatedTax = taxBase * 0.35 - 15440000;
+                    } else if (taxBase <= 300000000) {
+                        calculatedTax = taxBase * 0.38 - 19940000;
+                    } else if (taxBase <= 500000000) {
+                        calculatedTax = taxBase * 0.40 - 25940000;
+                    } else if (taxBase <= 1000000000) {
+                        calculatedTax = taxBase * 0.42 - 35940000;
+                    } else {
+                        calculatedTax = taxBase * 0.45 - 65940000;
+                    }
+                } else {
+                    if (regulated) {
+                        calculatedTax = taxBase * 0.75;
+                    } else {
+                        if (taxBase <= 14000000) {
+                            calculatedTax = taxBase * 0.06 * 1.3;
+                        } else if (taxBase <= 50000000) {
+                            calculatedTax = (taxBase * 0.15 - 1260000) * 1.3;
+                        } else {
+                            calculatedTax = (taxBase * 0.24 - 5760000) * 1.3;
+                        }
+                    }
+                }
+                
+                const localTax = calculatedTax * 0.1;
+                const capitalGainsTax = calculatedTax + localTax;
+                
+                // 새로운 손익분기점 계산
+                breakEvenPrice = totalInvestment + sellBrokerage + capitalGainsTax + otherSellCost;
+                iterations++;
+            }
+
+            // 최종 값으로 다시 계산 (표시용)
+            const finalSellBrokerage = breakEvenPrice * (sellBrokerageRate / 100);
+            const finalCapitalGain = breakEvenPrice - purchasePrice - acquisitionTax - buyBrokerage - registrationFee;
+            
+            let finalDeductionRate = 0;
+            if (housingCount === 1) {
+                const holdingDeduction = Math.min(holdingYears * 4, 40);
+                const residenceDeduction = Math.min(residenceYears * 4, 40);
+                finalDeductionRate = Math.min(holdingDeduction + residenceDeduction, 80);
+            } else {
+                finalDeductionRate = Math.min(holdingYears * 2, 30);
+            }
+            const finalLongTermDeduction = finalCapitalGain * (finalDeductionRate / 100);
+            
+            let finalTaxBase = finalCapitalGain - finalLongTermDeduction - 2500000;
+            if (finalTaxBase < 0) finalTaxBase = 0;
+            
+            let finalCalculatedTax = 0;
+            if (housingCount === 1) {
+                if (finalTaxBase <= 14000000) {
+                    finalCalculatedTax = finalTaxBase * 0.06;
+                } else if (finalTaxBase <= 50000000) {
+                    finalCalculatedTax = finalTaxBase * 0.15 - 1260000;
+                } else if (finalTaxBase <= 88000000) {
+                    finalCalculatedTax = finalTaxBase * 0.24 - 5760000;
+                } else if (finalTaxBase <= 150000000) {
+                    finalCalculatedTax = finalTaxBase * 0.35 - 15440000;
+                } else if (finalTaxBase <= 300000000) {
+                    finalCalculatedTax = finalTaxBase * 0.38 - 19940000;
+                } else if (finalTaxBase <= 500000000) {
+                    finalCalculatedTax = finalTaxBase * 0.40 - 25940000;
+                } else if (finalTaxBase <= 1000000000) {
+                    finalCalculatedTax = finalTaxBase * 0.42 - 35940000;
+                } else {
+                    finalCalculatedTax = finalTaxBase * 0.45 - 65940000;
+                }
+            } else {
+                if (regulated) {
+                    finalCalculatedTax = finalTaxBase * 0.75;
+                } else {
+                    if (finalTaxBase <= 14000000) {
+                        finalCalculatedTax = finalTaxBase * 0.06 * 1.3;
+                    } else if (finalTaxBase <= 50000000) {
+                        finalCalculatedTax = (finalTaxBase * 0.15 - 1260000) * 1.3;
+                    } else {
+                        finalCalculatedTax = (finalTaxBase * 0.24 - 5760000) * 1.3;
+                    }
+                }
+            }
+            
+            const finalLocalTax = finalCalculatedTax * 0.1;
+            const estimatedCapitalGainsTax = finalCalculatedTax + finalLocalTax;
+
+            // 안내 메시지
+            const resultInfo = `최소 ${formatKoreanCurrency(breakEvenPrice)}에 매도해야 손해를 보지 않습니다. 이 가격은 총 투자금 ${formatKoreanCurrency(totalInvestment)}과 매도 시 발생하는 비용을 모두 회수할 수 있는 가격입니다.`;
+
+            // 결과 표시
+            document.getElementById('breakEvenPrice').textContent = formatKoreanCurrency(breakEvenPrice);
+            
+            document.getElementById('displayPurchasePrice').textContent = formatCurrency(purchasePrice);
+            document.getElementById('displayAcquisitionTax').textContent = formatCurrency(acquisitionTax);
+            document.getElementById('displayBuyBrokerage').textContent = formatCurrency(buyBrokerage);
+            document.getElementById('displayRegistrationFee').textContent = formatCurrency(registrationFee);
+            document.getElementById('displayOtherAcquisition').textContent = formatCurrency(otherAcquisitionCost);
+            document.getElementById('totalAcquisitionCost').textContent = formatCurrency(totalAcquisitionCost);
+            
+            document.getElementById('totalPropertyTax').textContent = formatCurrency(totalPropertyTax);
+            document.getElementById('totalMaintenanceFee').textContent = formatCurrency(totalMaintenanceFee);
+            document.getElementById('displayLoanInterest').textContent = formatCurrency(loanInterest);
+            document.getElementById('totalHoldingCost').textContent = formatCurrency(totalHoldingCost);
+            
+            document.getElementById('totalInvestment').textContent = formatCurrency(totalInvestment);
+            
+            document.getElementById('sellBrokerage').textContent = formatCurrency(finalSellBrokerage);
+            document.getElementById('estimatedCapitalGainsTax').textContent = formatCurrency(estimatedCapitalGainsTax);
+            document.getElementById('displayOtherSellCost').textContent = formatCurrency(otherSellCost);
+            
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('purchasePrice').value = '';
+            document.getElementById('acquisitionTax').value = '';
+            document.getElementById('buyBrokerage').value = '';
+            document.getElementById('registrationFee').value = '';
+            document.getElementById('otherAcquisitionCost').value = '0';
+            document.getElementById('holdingYears').value = '';
+            document.getElementById('propertyTax').value = '';
+            document.getElementById('maintenanceFee').value = '0';
+            document.getElementById('loanInterest').value = '0';
+            document.getElementById('sellBrokerageRate').value = '0.4';
+            document.getElementById('otherSellCost').value = '0';
+            document.getElementById('residenceYears').value = '';
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.querySelector('input[name="regulated"][value="no"]').checked = true;
+            document.getElementById('residenceSection').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const breakEvenPrice = document.getElementById('breakEvenPrice').textContent;
+            const totalInvestment = document.getElementById('totalInvestment').textContent;
+            const text = `부동산계산하기에서 손익분기점을 계산했어요!\n손익분기점: ${breakEvenPrice}\n총 투자금: ${totalInvestment}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '손익분기점 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

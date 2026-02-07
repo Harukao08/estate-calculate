@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전월세 전환 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/rent" class="back-button">
+            ← 집을 빌려주려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🔄</div>
+            <h1 class="calculator-title">전월세 전환 계산기</h1>
+            <p class="calculator-subtitle">전세↔월세 전환율을 계산합니다</p>
+        </div>
+
+        <!-- 전월세 전환 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 전월세 전환율이란?
+            </div>
+            <div class="info-content">
+                전세보증금과 월세를 상호 전환할 때 적용하는 이자율입니다.
+                <br><br>
+                • <strong>법정 전환율</strong>: 연 4% (주택임대차보호법)<br>
+                • <strong>실제 시장</strong>: 지역, 시세에 따라 3~5% 수준<br>
+                • <strong>계산 공식</strong>: (전세-월세보증금 차액) × 전환율 ÷ 12 = 월세<br>
+                <br>
+                전세를 월세로, 월세를 전세로 쉽게 계산할 수 있습니다.
+            </div>
+        </div>
+
+        <!-- 계산 모드 선택 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">계산 모드</h2>
+            
+            <div class="input-group">
+                <label class="input-label">전환 방향</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="convertMode" value="jeonseToWolse" checked>
+                        <span class="radio-label">전세 → 월세</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="convertMode" value="wolseToJeonse">
+                        <span class="radio-label">월세 → 전세</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전세 → 월세 -->
+        <div class="calc-section" id="jeonseToWolseSection">
+            <h2 class="calc-section-title">전세 → 월세 전환</h2>
+            
+            <div class="input-group">
+                <label class="input-label">현재 전세 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="jeonseDeposit" class="input-field" placeholder="예: 400000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">전환 후 월세 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="wolseDeposit" class="input-field" placeholder="예: 100000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">전세를 월세로 전환할 때의 보증금</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">전환율</label>
+                <div class="input-wrapper">
+                    <input type="text" id="jeonseRate" class="input-field" placeholder="4.0" inputmode="decimal" value="4.0">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">법정 전환율: 연 4% (협의 가능)</div>
+            </div>
+        </div>
+
+        <!-- 월세 → 전세 -->
+        <div class="calc-section" id="wolseToJeonseSection" style="display: none;">
+            <h2 class="calc-section-title">월세 → 전세 전환</h2>
+            
+            <div class="input-group">
+                <label class="input-label">현재 월세 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="currentWolseDeposit" class="input-field" placeholder="예: 100000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">현재 월세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="currentWolse" class="input-field" placeholder="예: 1000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">전환율</label>
+                <div class="input-wrapper">
+                    <input type="text" id="wolseRate" class="input-field" placeholder="4.0" inputmode="decimal" value="4.0">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">법정 전환율: 연 4% (협의 가능)</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <button class="calc-button" id="calculateButton">
+                전환 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">🔄 계산 결과</h2>
+            
+            <!-- 전세 → 월세 결과 -->
+            <div id="jeonseToWolseResult" style="display: none;">
+                <div class="result-card total">
+                    <div class="result-label">전환 후 월세</div>
+                    <div class="result-value" id="convertedWolse">0원</div>
+                </div>
+
+                <div class="result-breakdown">
+                    <h3 class="breakdown-title">전환 상세</h3>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">전세 보증금</span>
+                        <span class="breakdown-value" id="displayJeonseDeposit">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">월세 보증금</span>
+                        <span class="breakdown-value" id="displayWolseDeposit">0원</span>
+                    </div>
+                    <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                        <span class="breakdown-label" style="font-weight: 600;">전환 대상 금액</span>
+                        <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="convertAmount">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">적용 전환율 (연)</span>
+                        <span class="breakdown-value" id="displayJeonseRate">0%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">계산식</span>
+                        <span class="breakdown-value" id="jeonseFormula">-</span>
+                    </div>
+                </div>
+
+                <div class="result-breakdown">
+                    <h3 class="breakdown-title">전환 후 임대 조건</h3>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">보증금</span>
+                        <span class="breakdown-value" id="finalWolseDeposit">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">월세</span>
+                        <span class="breakdown-value" id="finalWolse">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">연간 월세 총액</span>
+                        <span class="breakdown-value" id="annualWolse">0원</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 월세 → 전세 결과 -->
+            <div id="wolseToJeonseResult" style="display: none;">
+                <div class="result-card total">
+                    <div class="result-label">전환 후 전세 보증금</div>
+                    <div class="result-value" id="convertedJeonse">0원</div>
+                </div>
+
+                <div class="result-breakdown">
+                    <h3 class="breakdown-title">전환 상세</h3>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">현재 월세 보증금</span>
+                        <span class="breakdown-value" id="displayCurrentWolseDeposit">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">현재 월세</span>
+                        <span class="breakdown-value" id="displayCurrentWolse">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">적용 전환율 (연)</span>
+                        <span class="breakdown-value" id="displayWolseRate">0%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">계산식</span>
+                        <span class="breakdown-value" id="wolseFormula">-</span>
+                    </div>
+                    <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                        <span class="breakdown-label" style="font-weight: 600;">월세 환산 보증금</span>
+                        <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="wolseEquivalent">0원</span>
+                    </div>
+                </div>
+
+                <div class="result-breakdown">
+                    <h3 class="breakdown-title">전환 후 임대 조건</h3>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">전세 보증금</span>
+                        <span class="breakdown-value" id="finalJeonseDeposit">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">월세</span>
+                        <span class="breakdown-value">0원</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>전월세 전환 팁</strong><br>
+                    • 법정 전환율 4%는 상한선이며, 협의로 조정 가능<br>
+                    • 시장 금리가 낮으면 전환율도 낮게 협상 가능<br>
+                    • 전세→월세 시 세입자 부담 증가 고려<br>
+                    • 월세→전세 시 임대인 자금 부담 고려
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateConversion);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 전환 모드 변경
+            const convertModeInputs = document.querySelectorAll('input[name="convertMode"]');
+            convertModeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const jeonseSection = document.getElementById('jeonseToWolseSection');
+                    const wolseSection = document.getElementById('wolseToJeonseSection');
+                    
+                    if (this.value === 'jeonseToWolse') {
+                        jeonseSection.style.display = 'block';
+                        wolseSection.style.display = 'none';
+                    } else {
+                        jeonseSection.style.display = 'none';
+                        wolseSection.style.display = 'block';
+                    }
+                });
+            });
+
+            // 숫자 입력 필드
+            const numericInputs = ['jeonseDeposit', 'wolseDeposit', 'jeonseRate', 
+                                   'currentWolseDeposit', 'currentWolse', 'wolseRate'];
+            numericInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') calculateConversion();
+                    });
+                }
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculateConversion() {
+            const convertMode = document.querySelector('input[name="convertMode"]:checked').value;
+
+            if (convertMode === 'jeonseToWolse') {
+                calculateJeonseToWolse();
+            } else {
+                calculateWolseToJeonse();
+            }
+        }
+
+        function calculateJeonseToWolse() {
+            const jeonseDeposit = parseInt(document.getElementById('jeonseDeposit').value) || 0;
+            const wolseDeposit = parseInt(document.getElementById('wolseDeposit').value) || 0;
+            const rate = parseFloat(document.getElementById('jeonseRate').value) || 4.0;
+
+            if (jeonseDeposit === 0) {
+                alert('전세 보증금을 입력해주세요.');
+                return;
+            }
+
+            if (wolseDeposit >= jeonseDeposit) {
+                alert('월세 보증금은 전세 보증금보다 작아야 합니다.');
+                return;
+            }
+
+            // 전환 대상 금액
+            const convertAmount = jeonseDeposit - wolseDeposit;
+
+            // 월세 계산: (전환 대상 금액 × 전환율) ÷ 12
+            const monthlyRent = (convertAmount * (rate / 100)) / 12;
+
+            // 연간 월세 총액
+            const annualRent = monthlyRent * 12;
+
+            // 계산식
+            const formula = `(${formatKoreanCurrency(convertAmount)} × ${rate}%) ÷ 12`;
+
+            // 결과 메시지
+            const resultInfo = `전세 ${formatKoreanCurrency(jeonseDeposit)}을 보증금 ${formatKoreanCurrency(wolseDeposit)} + 월세 ${formatKoreanCurrency(monthlyRent)}로 전환할 수 있습니다. (전환율 연 ${rate}% 적용)`;
+
+            // 결과 표시
+            document.getElementById('convertedWolse').textContent = formatKoreanCurrency(monthlyRent);
+            document.getElementById('displayJeonseDeposit').textContent = formatCurrency(jeonseDeposit);
+            document.getElementById('displayWolseDeposit').textContent = formatCurrency(wolseDeposit);
+            document.getElementById('convertAmount').textContent = formatCurrency(convertAmount);
+            document.getElementById('displayJeonseRate').textContent = rate + '%';
+            document.getElementById('jeonseFormula').textContent = formula;
+            document.getElementById('finalWolseDeposit').textContent = formatCurrency(wolseDeposit);
+            document.getElementById('finalWolse').textContent = formatCurrency(monthlyRent);
+            document.getElementById('annualWolse').textContent = formatCurrency(annualRent);
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            // 결과 섹션 표시
+            document.getElementById('jeonseToWolseResult').style.display = 'block';
+            document.getElementById('wolseToJeonseResult').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function calculateWolseToJeonse() {
+            const currentWolseDeposit = parseInt(document.getElementById('currentWolseDeposit').value) || 0;
+            const currentWolse = parseInt(document.getElementById('currentWolse').value) || 0;
+            const rate = parseFloat(document.getElementById('wolseRate').value) || 4.0;
+
+            if (currentWolse === 0) {
+                alert('현재 월세를 입력해주세요.');
+                return;
+            }
+
+            // 월세 환산 보증금: (월세 × 12) ÷ 전환율
+            const wolseEquivalent = (currentWolse * 12) / (rate / 100);
+
+            // 전세 보증금: 현재 보증금 + 월세 환산 보증금
+            const jeonseDeposit = currentWolseDeposit + wolseEquivalent;
+
+            // 계산식
+            const formula = `(${formatKoreanCurrency(currentWolse)} × 12) ÷ ${rate}%`;
+
+            // 결과 메시지
+            const resultInfo = `보증금 ${formatKoreanCurrency(currentWolseDeposit)} + 월세 ${formatKoreanCurrency(currentWolse)}를 전세 ${formatKoreanCurrency(jeonseDeposit)}로 전환할 수 있습니다. (전환율 연 ${rate}% 적용)`;
+
+            // 결과 표시
+            document.getElementById('convertedJeonse').textContent = formatKoreanCurrency(jeonseDeposit);
+            document.getElementById('displayCurrentWolseDeposit').textContent = formatCurrency(currentWolseDeposit);
+            document.getElementById('displayCurrentWolse').textContent = formatCurrency(currentWolse);
+            document.getElementById('displayWolseRate').textContent = rate + '%';
+            document.getElementById('wolseFormula').textContent = formula;
+            document.getElementById('wolseEquivalent').textContent = formatCurrency(wolseEquivalent);
+            document.getElementById('finalJeonseDeposit').textContent = formatCurrency(jeonseDeposit);
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            // 결과 섹션 표시
+            document.getElementById('jeonseToWolseResult').style.display = 'none';
+            document.getElementById('wolseToJeonseResult').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('jeonseDeposit').value = '';
+            document.getElementById('wolseDeposit').value = '';
+            document.getElementById('jeonseRate').value = '4.0';
+            document.getElementById('currentWolseDeposit').value = '';
+            document.getElementById('currentWolse').value = '';
+            document.getElementById('wolseRate').value = '4.0';
+            document.querySelector('input[name="convertMode"][value="jeonseToWolse"]').checked = true;
+            document.getElementById('jeonseToWolseSection').style.display = 'block';
+            document.getElementById('wolseToJeonseSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const convertMode = document.querySelector('input[name="convertMode"]:checked').value;
+            let text = '';
+            
+            if (convertMode === 'jeonseToWolse') {
+                const wolse = document.getElementById('convertedWolse').textContent;
+                const deposit = document.getElementById('finalWolseDeposit').textContent;
+                text = `부동산계산하기에서 전월세 전환을 계산했어요!\n전세 → 월세\n보증금: ${deposit}\n월세: ${wolse}`;
+            } else {
+                const jeonse = document.getElementById('convertedJeonse').textContent;
+                text = `부동산계산하기에서 전월세 전환을 계산했어요!\n월세 → 전세\n전세 보증금: ${jeonse}`;
+            }
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '전월세 전환 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

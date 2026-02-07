@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>적정 임대료 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/rent" class="back-button">
+            ← 집을 빌려주려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">💰</div>
+            <h1 class="calculator-title">적정 임대료 계산기</h1>
+            <p class="calculator-subtitle">시세 대비 적정 월세를 산정합니다</p>
+        </div>
+
+        <!-- 적정 임대료 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 적정 임대료란?
+            </div>
+            <div class="info-content">
+                주택 시세, 위치, 조건 등을 고려하여 시장에서 통용되는 합리적인 임대료입니다.
+                <br><br>
+                • <strong>수익률 기준</strong>: 주택가격 대비 연 3~5% 수준<br>
+                • <strong>전세가율 기준</strong>: 전세가의 60~80% 수준<br>
+                • <strong>시장 비교</strong>: 인근 유사 매물 임대료 참고<br>
+                <br>
+                여러 방법으로 계산하여 적정 수준을 찾을 수 있습니다.
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 매매 시세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="marketPrice" class="input-field" placeholder="예: 600000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">현재 시장에서 거래되는 가격</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 전세 시세 (선택)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="jeonsePrice" class="input-field" placeholder="예: 450000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">인근 전세 시세 (입력 시 추가 분석)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">희망 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="desiredDeposit" class="input-field" placeholder="예: 100000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">임대 시 받고 싶은 보증금</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">계산 기준</h2>
+            
+            <div class="input-group">
+                <label class="input-label">목표 수익률 (연)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="targetYield" class="input-field" placeholder="4.0" inputmode="decimal" value="4.0">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">임대료 산정 기준 수익률 (일반적으로 3~5%)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">전월세 전환율 (연)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="conversionRate" class="input-field" placeholder="4.0" inputmode="decimal" value="4.0">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">전세가 기준 월세 계산 시 사용</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 상태</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="condition" value="excellent">
+                        <span class="radio-label">우수 (+10%)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="condition" value="good" checked>
+                        <span class="radio-label">양호 (기준)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="condition" value="fair">
+                        <span class="radio-label">보통 (-5%)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="condition" value="poor">
+                        <span class="radio-label">노후 (-10%)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">입지 조건</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="prime">
+                        <span class="radio-label">역세권 (+5%)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="good" checked>
+                        <span class="radio-label">일반 (기준)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="poor">
+                        <span class="radio-label">외곽 (-5%)</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                적정 임대료 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">적정 월세 (권장)</div>
+                <div class="result-value" id="recommendedRent">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">방법 1: 수익률 기준 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주택 시세</span>
+                    <span class="breakdown-value" id="displayMarketPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">희망 보증금</span>
+                    <span class="breakdown-value" id="displayDesiredDeposit">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">실투자금 (시세 - 보증금)</span>
+                    <span class="breakdown-value" id="netInvestment">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">목표 수익률 (연)</span>
+                    <span class="breakdown-value" id="displayTargetYield">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">계산식</span>
+                    <span class="breakdown-value" id="yieldFormula">-</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">수익률 기준 월세</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="yieldBasedRent">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown" id="jeonseBasedSection" style="display: none;">
+                <h3 class="breakdown-title">방법 2: 전세가 기준 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전세 시세</span>
+                    <span class="breakdown-value" id="displayJeonsePrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">희망 보증금</span>
+                    <span class="breakdown-value" id="jeonseDesiredDeposit">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전환 대상 금액</span>
+                    <span class="breakdown-value" id="jeonseConvertAmount">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전환율 (연)</span>
+                    <span class="breakdown-value" id="displayConversionRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">계산식</span>
+                    <span class="breakdown-value" id="jeonseFormula">-</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">전세가 기준 월세</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="jeonseBasedRent">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">조건별 조정</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주택 상태 조정</span>
+                    <span class="breakdown-value" id="conditionAdjustment">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">입지 조건 조정</span>
+                    <span class="breakdown-value" id="locationAdjustment">0%</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">총 조정률</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="totalAdjustment">0%</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">임대료 범위 제안</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">최소 임대료 (-10%)</span>
+                    <span class="breakdown-value" id="minRent">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">적정 임대료 (권장)</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="recommendedRentDetail">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">최대 임대료 (+10%)</span>
+                    <span class="breakdown-value" id="maxRent">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">연간 수익 분석</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 월세 수입</span>
+                    <span class="breakdown-value" id="annualRent">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">실투자금 대비 수익률</span>
+                    <span class="breakdown-value" id="actualYield">0%</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>임대료 책정 팁</strong><br>
+                    • 인근 유사 매물 시세 조사 필수<br>
+                    • 초기에는 낮게 시작해서 공실 방지<br>
+                    • 리모델링, 옵션 제공 시 임대료 상향 가능<br>
+                    • 장기 계약 시 월세 할인 고려<br>
+                    • 시장 수요와 공급 상황 반영
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateAppropriateRent);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드
+            ['marketPrice', 'jeonsePrice', 'desiredDeposit', 'targetYield', 'conversionRate'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') calculateAppropriateRent();
+                    });
+                }
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculateAppropriateRent() {
+            const marketPrice = parseInt(document.getElementById('marketPrice').value) || 0;
+            const jeonsePrice = parseInt(document.getElementById('jeonsePrice').value) || 0;
+            const desiredDeposit = parseInt(document.getElementById('desiredDeposit').value) || 0;
+            const targetYield = parseFloat(document.getElementById('targetYield').value) || 4.0;
+            const conversionRate = parseFloat(document.getElementById('conversionRate').value) || 4.0;
+            const condition = document.querySelector('input[name="condition"]:checked').value;
+            const location = document.querySelector('input[name="location"]:checked').value;
+
+            if (marketPrice === 0) {
+                alert('주택 매매 시세를 입력해주세요.');
+                return;
+            }
+
+            // 방법 1: 수익률 기준 계산
+            const netInvestment = marketPrice - desiredDeposit;
+            const yieldBasedAnnualRent = netInvestment * (targetYield / 100);
+            const yieldBasedMonthlyRent = yieldBasedAnnualRent / 12;
+
+            const yieldFormula = `(${formatKoreanCurrency(netInvestment)} × ${targetYield}%) ÷ 12`;
+
+            // 방법 2: 전세가 기준 계산 (전세가 입력 시)
+            let jeonseBasedMonthlyRent = 0;
+            let jeonseFormula = '';
+            let jeonseConvertAmount = 0;
+            
+            if (jeonsePrice > 0) {
+                jeonseConvertAmount = jeonsePrice - desiredDeposit;
+                jeonseBasedMonthlyRent = (jeonseConvertAmount * (conversionRate / 100)) / 12;
+                jeonseFormula = `(${formatKoreanCurrency(jeonseConvertAmount)} × ${conversionRate}%) ÷ 12`;
+            }
+
+            // 기준 월세 결정 (전세가 있으면 평균, 없으면 수익률 기준)
+            let baseRent;
+            if (jeonsePrice > 0 && jeonseBasedMonthlyRent > 0) {
+                baseRent = (yieldBasedMonthlyRent + jeonseBasedMonthlyRent) / 2;
+            } else {
+                baseRent = yieldBasedMonthlyRent;
+            }
+
+            // 조건별 조정
+            let conditionAdjustment = 0;
+            if (condition === 'excellent') conditionAdjustment = 10;
+            else if (condition === 'fair') conditionAdjustment = -5;
+            else if (condition === 'poor') conditionAdjustment = -10;
+
+            let locationAdjustment = 0;
+            if (location === 'prime') locationAdjustment = 5;
+            else if (location === 'poor') locationAdjustment = -5;
+
+            const totalAdjustment = conditionAdjustment + locationAdjustment;
+
+            // 최종 권장 임대료
+            const recommendedRent = baseRent * (1 + totalAdjustment / 100);
+
+            // 범위 제안
+            const minRent = recommendedRent * 0.9;
+            const maxRent = recommendedRent * 1.1;
+
+            // 수익 분석
+            const annualRent = recommendedRent * 12;
+            const actualYield = (annualRent / netInvestment) * 100;
+
+            // 결과 메시지
+            let resultInfo = `시세 ${formatKoreanCurrency(marketPrice)} 기준 적정 월세는 ${formatKoreanCurrency(recommendedRent)}입니다.`;
+            if (jeonsePrice > 0) {
+                resultInfo += ` (수익률 방식과 전세가 방식의 평균값 + 조건 조정)`;
+            } else {
+                resultInfo += ` (수익률 ${targetYield}% 기준 + 조건 조정)`;
+            }
+
+            // 결과 표시
+            document.getElementById('recommendedRent').textContent = formatKoreanCurrency(recommendedRent);
+            
+            // 방법 1: 수익률 기준
+            document.getElementById('displayMarketPrice').textContent = formatCurrency(marketPrice);
+            document.getElementById('displayDesiredDeposit').textContent = formatCurrency(desiredDeposit);
+            document.getElementById('netInvestment').textContent = formatCurrency(netInvestment);
+            document.getElementById('displayTargetYield').textContent = targetYield + '%';
+            document.getElementById('yieldFormula').textContent = yieldFormula;
+            document.getElementById('yieldBasedRent').textContent = formatCurrency(yieldBasedMonthlyRent);
+
+            // 방법 2: 전세가 기준
+            if (jeonsePrice > 0) {
+                document.getElementById('jeonseBasedSection').style.display = 'block';
+                document.getElementById('displayJeonsePrice').textContent = formatCurrency(jeonsePrice);
+                document.getElementById('jeonseDesiredDeposit').textContent = formatCurrency(desiredDeposit);
+                document.getElementById('jeonseConvertAmount').textContent = formatCurrency(jeonseConvertAmount);
+                document.getElementById('displayConversionRate').textContent = conversionRate + '%';
+                document.getElementById('jeonseFormula').textContent = jeonseFormula;
+                document.getElementById('jeonseBasedRent').textContent = formatCurrency(jeonseBasedMonthlyRent);
+            } else {
+                document.getElementById('jeonseBasedSection').style.display = 'none';
+            }
+
+            // 조정
+            document.getElementById('conditionAdjustment').textContent = conditionAdjustment + '%';
+            document.getElementById('locationAdjustment').textContent = locationAdjustment + '%';
+            document.getElementById('totalAdjustment').textContent = totalAdjustment + '%';
+
+            // 범위
+            document.getElementById('minRent').textContent = formatCurrency(minRent);
+            document.getElementById('recommendedRentDetail').textContent = formatCurrency(recommendedRent);
+            document.getElementById('maxRent').textContent = formatCurrency(maxRent);
+
+            // 수익 분석
+            document.getElementById('annualRent').textContent = formatCurrency(annualRent);
+            document.getElementById('actualYield').textContent = actualYield.toFixed(2) + '%';
+
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('marketPrice').value = '';
+            document.getElementById('jeonsePrice').value = '';
+            document.getElementById('desiredDeposit').value = '';
+            document.getElementById('targetYield').value = '4.0';
+            document.getElementById('conversionRate').value = '4.0';
+            document.querySelector('input[name="condition"][value="good"]').checked = true;
+            document.querySelector('input[name="location"][value="good"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const recommendedRent = document.getElementById('recommendedRent').textContent;
+            const deposit = document.getElementById('displayDesiredDeposit').textContent;
+            const text = `부동산계산하기에서 적정 임대료를 계산했어요!\n보증금: ${deposit}\n적정 월세: ${recommendedRent}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '적정 임대료 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>
