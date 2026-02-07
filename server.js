@@ -152,6 +152,42 @@ app.get('/calculator/capital-gains-tax', (req, res) => {
   });
 });
 
+app.get('/calculator/net-proceeds', (req, res) => {
+  res.render('net-proceeds', {
+    title: '실수령액 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/break-even', (req, res) => {
+  res.render('break-even', {
+    title: '손익분기점 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/1house-nontaxable', (req, res) => {
+  res.render('1house-nontaxable', {
+    title: '1세대 1주택 비과세 확인 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/long-term-deduction', (req, res) => {
+  res.render('long-term-deduction', {
+    title: '장기보유특별공제 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/jeonse-wolse-convert', (req, res) => {
+  res.render('jeonse-wolse-convert', {
+    title: '전월세 전환 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/appropriate-rent', (req, res) => {
+  res.render('appropriate-rent', {
+    title: '적정 임대료 계산기 - 부동산계산하기'
+  });
+});
+
 // 계산기 API 엔드포인트 (예시)
 app.post('/api/calculate/acquisition-tax', (req, res) => {
   // 취득세 계산 로직
