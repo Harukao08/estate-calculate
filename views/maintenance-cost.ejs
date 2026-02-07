@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리비 및 유지비 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/hold" class="back-button">
+            ← 집을 가지고 있어요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🔧</div>
+            <h1 class="calculator-title">관리비 및 유지비 계산기</h1>
+            <p class="calculator-subtitle">주택 유지에 필요한 월간 비용을 계산합니다</p>
+        </div>
+
+        <!-- 관리비 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 주택 유지비란?
+            </div>
+            <div class="info-content">
+                주택을 소유하고 거주하면서 매월 발생하는 고정 비용입니다.
+                <br><br>
+                • <strong>아파트</strong>: 관리비, 공과금, 수선충당금 등<br>
+                • <strong>단독/빌라</strong>: 공과금, 수선비, 보험료 등<br>
+                • <strong>세금</strong>: 재산세 월할 계산
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 유형</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="apartment" checked>
+                        <span class="radio-label">아파트</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="villa">
+                        <span class="radio-label">빌라/연립</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="house">
+                        <span class="radio-label">단독주택</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 면적 (전용면적)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="area" class="input-field" placeholder="예: 84" inputmode="decimal">
+                    <span class="input-suffix">㎡</span>
+                </div>
+                <div class="input-helper">전용면적 기준 (1평 ≈ 3.3㎡)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">거주 인원</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="residents" value="1">
+                        <span class="radio-label">1인</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="residents" value="2" checked>
+                        <span class="radio-label">2인</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="residents" value="3">
+                        <span class="radio-label">3인</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="residents" value="4">
+                        <span class="radio-label">4인 이상</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section" id="apartmentSection">
+            <h2 class="calc-section-title">아파트 관리비</h2>
+            
+            <div class="input-group">
+                <label class="input-label">일반관리비 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="generalFee" class="input-field" placeholder="예: 50000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">청소비, 경비비, 승강기 유지비 등</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">수선유지비 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="repairFee" class="input-field" placeholder="예: 20000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">건물 수선 및 유지관리 비용</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">장기수선충당금 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="reserveFund" class="input-field" placeholder="예: 30000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">장기수선을 위한 적립금</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">공과금</h2>
+            
+            <div class="input-group">
+                <label class="input-label">전기료 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="electricityFee" class="input-field" placeholder="예: 80000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">수도료 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="waterFee" class="input-field" placeholder="예: 30000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">가스비 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="gasFee" class="input-field" placeholder="예: 60000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">난방비 (동절기 추가, 월 평균)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="heatingFee" class="input-field" placeholder="예: 100000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">겨울철 추가 난방비를 월평균으로 계산</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">기타 비용</h2>
+            
+            <div class="input-group">
+                <label class="input-label">인터넷/TV (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="internetFee" class="input-field" placeholder="예: 40000" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주차비 (월)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="parkingFee" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">아파트 외 별도 주차장 이용 시</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">화재보험료 (연간)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="insuranceFee" class="input-field" placeholder="예: 200000" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택 화재보험료 (연간 금액 입력)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">재산세 (연간)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="propertyTax" class="input-field" placeholder="예: 1500000" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">연간 재산세를 월할 계산합니다</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                월 유지비 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">월간 총 유지비</div>
+                <div class="result-value" id="totalMonthlyCost">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">관리비 항목</h3>
+                <div class="breakdown-item" id="generalFeeItem">
+                    <span class="breakdown-label">일반관리비</span>
+                    <span class="breakdown-value" id="displayGeneralFee">0원</span>
+                </div>
+                <div class="breakdown-item" id="repairFeeItem">
+                    <span class="breakdown-label">수선유지비</span>
+                    <span class="breakdown-value" id="displayRepairFee">0원</span>
+                </div>
+                <div class="breakdown-item" id="reserveFundItem">
+                    <span class="breakdown-label">장기수선충당금</span>
+                    <span class="breakdown-value" id="displayReserveFund">0원</span>
+                </div>
+                <div class="breakdown-item" id="managementSubtotal" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">관리비 소계</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="managementTotal">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">공과금</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전기료</span>
+                    <span class="breakdown-value" id="displayElectricityFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">수도료</span>
+                    <span class="breakdown-value" id="displayWaterFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">가스비</span>
+                    <span class="breakdown-value" id="displayGasFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">난방비 (월평균)</span>
+                    <span class="breakdown-value" id="displayHeatingFee">0원</span>
+                </div>
+                <div class="breakdown-item" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">공과금 소계</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="utilityTotal">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">기타 비용</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">인터넷/TV</span>
+                    <span class="breakdown-value" id="displayInternetFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주차비</span>
+                    <span class="breakdown-value" id="displayParkingFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">화재보험료 (월할)</span>
+                    <span class="breakdown-value" id="monthlyInsuranceFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">재산세 (월할)</span>
+                    <span class="breakdown-value" id="monthlyPropertyTax">0원</span>
+                </div>
+                <div class="breakdown-item" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">기타 비용 소계</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="otherTotal">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">연간 예상 비용</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">월간 총 유지비</span>
+                    <span class="breakdown-value" id="displayMonthlyCost">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700;">연간 총 유지비</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="annualCost">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="costInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>절약 팁</strong><br>
+                    • 전기료: LED 전구 사용, 대기전력 차단<br>
+                    • 수도료: 절수 샤워헤드, 세탁기 모아서 사용<br>
+                    • 난방비: 보일러 적정 온도 유지 (18~20도), 단열 강화<br>
+                    • 관리비: 불필요한 서비스 해지, 공동 구매 참여
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateMaintenanceCost);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 주택 유형 변경
+            const houseTypeInputs = document.querySelectorAll('input[name="houseType"]');
+            houseTypeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const apartmentSection = document.getElementById('apartmentSection');
+                    if (this.value === 'apartment') {
+                        apartmentSection.style.display = 'block';
+                    } else {
+                        apartmentSection.style.display = 'none';
+                    }
+                });
+            });
+
+            // 숫자 입력 필드 포맷팅
+            const numericInputs = ['area', 'generalFee', 'repairFee', 'reserveFund', 'electricityFee', 
+                                   'waterFee', 'gasFee', 'heatingFee', 'internetFee', 'parkingFee', 
+                                   'insuranceFee', 'propertyTax'];
+            numericInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            calculateMaintenanceCost();
+                        }
+                    });
+                }
+            });
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 관리비 계산 함수
+        function calculateMaintenanceCost() {
+            const houseType = document.querySelector('input[name="houseType"]:checked').value;
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const residents = parseInt(document.querySelector('input[name="residents"]:checked').value);
+
+            // 관리비 (아파트만)
+            let generalFee = 0;
+            let repairFee = 0;
+            let reserveFund = 0;
+
+            if (houseType === 'apartment') {
+                generalFee = parseInt(document.getElementById('generalFee').value) || 0;
+                repairFee = parseInt(document.getElementById('repairFee').value) || 0;
+                reserveFund = parseInt(document.getElementById('reserveFund').value) || 0;
+            }
+
+            // 공과금
+            const electricityFee = parseInt(document.getElementById('electricityFee').value) || 0;
+            const waterFee = parseInt(document.getElementById('waterFee').value) || 0;
+            const gasFee = parseInt(document.getElementById('gasFee').value) || 0;
+            const heatingFee = parseInt(document.getElementById('heatingFee').value) || 0;
+
+            // 기타 비용
+            const internetFee = parseInt(document.getElementById('internetFee').value) || 0;
+            const parkingFee = parseInt(document.getElementById('parkingFee').value) || 0;
+            const insuranceFee = parseInt(document.getElementById('insuranceFee').value) || 0;
+            const propertyTax = parseInt(document.getElementById('propertyTax').value) || 0;
+
+            // 월할 계산
+            const monthlyInsuranceFee = insuranceFee / 12;
+            const monthlyPropertyTax = propertyTax / 12;
+
+            // 소계 계산
+            const managementTotal = generalFee + repairFee + reserveFund;
+            const utilityTotal = electricityFee + waterFee + gasFee + heatingFee;
+            const otherTotal = internetFee + parkingFee + monthlyInsuranceFee + monthlyPropertyTax;
+
+            // 월간 총 유지비
+            const totalMonthlyCost = managementTotal + utilityTotal + otherTotal;
+
+            // 연간 총 유지비
+            const annualCost = totalMonthlyCost * 12;
+
+            // 안내 메시지
+            let costInfo = '';
+            if (houseType === 'apartment') {
+                costInfo = `${area}㎡ 아파트 ${residents}인 가구 기준 월 ${formatKoreanCurrency(totalMonthlyCost)}의 유지비가 발생합니다.`;
+            } else if (houseType === 'villa') {
+                costInfo = `${area}㎡ 빌라/연립 ${residents}인 가구 기준 월 ${formatKoreanCurrency(totalMonthlyCost)}의 유지비가 발생합니다.`;
+            } else {
+                costInfo = `${area}㎡ 단독주택 ${residents}인 가구 기준 월 ${formatKoreanCurrency(totalMonthlyCost)}의 유지비가 발생합니다.`;
+            }
+
+            // 1㎡당 유지비
+            if (area > 0) {
+                const costPerArea = totalMonthlyCost / area;
+                costInfo += ` (㎡당 월 ${formatCurrency(costPerArea)})`;
+            }
+
+            // 결과 표시
+            document.getElementById('totalMonthlyCost').textContent = formatKoreanCurrency(totalMonthlyCost);
+            document.getElementById('displayMonthlyCost').textContent = formatCurrency(totalMonthlyCost);
+            document.getElementById('annualCost').textContent = formatCurrency(annualCost);
+
+            // 관리비 항목 (아파트만 표시)
+            const generalFeeItem = document.getElementById('generalFeeItem');
+            const repairFeeItem = document.getElementById('repairFeeItem');
+            const reserveFundItem = document.getElementById('reserveFundItem');
+            const managementSubtotal = document.getElementById('managementSubtotal');
+
+            if (houseType === 'apartment') {
+                generalFeeItem.style.display = 'flex';
+                repairFeeItem.style.display = 'flex';
+                reserveFundItem.style.display = 'flex';
+                managementSubtotal.style.display = 'flex';
+                
+                document.getElementById('displayGeneralFee').textContent = formatCurrency(generalFee);
+                document.getElementById('displayRepairFee').textContent = formatCurrency(repairFee);
+                document.getElementById('displayReserveFund').textContent = formatCurrency(reserveFund);
+                document.getElementById('managementTotal').textContent = formatCurrency(managementTotal);
+            } else {
+                generalFeeItem.style.display = 'none';
+                repairFeeItem.style.display = 'none';
+                reserveFundItem.style.display = 'none';
+                managementSubtotal.style.display = 'none';
+            }
+
+            // 공과금
+            document.getElementById('displayElectricityFee').textContent = formatCurrency(electricityFee);
+            document.getElementById('displayWaterFee').textContent = formatCurrency(waterFee);
+            document.getElementById('displayGasFee').textContent = formatCurrency(gasFee);
+            document.getElementById('displayHeatingFee').textContent = formatCurrency(heatingFee);
+            document.getElementById('utilityTotal').textContent = formatCurrency(utilityTotal);
+
+            // 기타 비용
+            document.getElementById('displayInternetFee').textContent = formatCurrency(internetFee);
+            document.getElementById('displayParkingFee').textContent = formatCurrency(parkingFee);
+            document.getElementById('monthlyInsuranceFee').textContent = formatCurrency(monthlyInsuranceFee);
+            document.getElementById('monthlyPropertyTax').textContent = formatCurrency(monthlyPropertyTax);
+            document.getElementById('otherTotal').textContent = formatCurrency(otherTotal);
+
+            document.getElementById('costInfo').textContent = costInfo;
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('area').value = '';
+            document.querySelector('input[name="houseType"][value="apartment"]').checked = true;
+            document.querySelector('input[name="residents"][value="2"]').checked = true;
+            document.getElementById('generalFee').value = '';
+            document.getElementById('repairFee').value = '';
+            document.getElementById('reserveFund').value = '';
+            document.getElementById('electricityFee').value = '';
+            document.getElementById('waterFee').value = '';
+            document.getElementById('gasFee').value = '';
+            document.getElementById('heatingFee').value = '';
+            document.getElementById('internetFee').value = '0';
+            document.getElementById('parkingFee').value = '0';
+            document.getElementById('insuranceFee').value = '0';
+            document.getElementById('propertyTax').value = '0';
+            document.getElementById('apartmentSection').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const totalMonthlyCost = document.getElementById('totalMonthlyCost').textContent;
+            const annualCost = document.getElementById('annualCost').textContent;
+            const text = `부동산계산하기에서 유지비를 계산했어요!\n월간 총 유지비: ${totalMonthlyCost}\n연간 총 유지비: ${annualCost}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '관리비 및 유지비 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

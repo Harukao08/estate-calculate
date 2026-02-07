@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>종합부동산세 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/hold" class="back-button">
+            ← 집을 가지고 있어요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📊</div>
+            <h1 class="calculator-title">종합부동산세 계산기</h1>
+            <p class="calculator-subtitle">고가 주택 보유 시 추가 세금을 계산합니다</p>
+        </div>
+
+        <!-- 종부세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 종합부동산세(종부세)란?
+            </div>
+            <div class="info-content">
+                종부세는 고가 주택을 보유한 사람에게 부과되는 국세입니다.
+                <br><br>
+                • <strong>과세기준일</strong>: 매년 6월 1일<br>
+                • <strong>납부 시기</strong>: 12월 1일~15일<br>
+                • <strong>과세 대상</strong>: 주택 공시가격 합계가 기준금액 초과 시<br>
+                &nbsp;&nbsp;- 1주택자: 12억원 초과<br>
+                &nbsp;&nbsp;- 2주택자: 9억원 초과<br>
+                &nbsp;&nbsp;- 3주택 이상: 6억원 초과
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 주택 수</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 공시가격 총합</label>
+                <div class="input-wrapper">
+                    <input type="text" id="totalPublicPrice" class="input-field" placeholder="예: 1500000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">보유한 모든 주택의 공시가격 합계</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">조정대상지역 주택 보유 여부</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="no" checked>
+                        <span class="radio-label">없음 (일반지역만)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="regulated" value="yes">
+                        <span class="radio-label">있음 (조정지역 포함)</span>
+                    </label>
+                </div>
+                <div class="input-helper">조정지역 2주택 이상 시 중과세율 적용</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">고령자 여부 (만 60세 이상)</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="elderly" value="no" checked>
+                        <span class="radio-label">해당 없음</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="elderly" value="60">
+                        <span class="radio-label">만 60~64세 (20% 공제)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="elderly" value="65">
+                        <span class="radio-label">만 65세 이상 (30% 공제)</span>
+                    </label>
+                </div>
+                <div class="input-helper">1주택자 고령자 공제 (5년 이상 보유 시)</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                종부세 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 종합부동산세</div>
+                <div class="result-value" id="totalTax">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">종부세 계산 과정</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주택 공시가격 총합</span>
+                    <span class="breakdown-value" id="displayTotalPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기본공제</span>
+                    <span class="breakdown-value" id="basicDeduction">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">과세표준</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="taxBase">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">적용 세율</span>
+                    <span class="breakdown-value" id="taxRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">종부세 본세</span>
+                    <span class="breakdown-value" id="baseTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">농어촌특별세 (본세 × 20%)</span>
+                    <span class="breakdown-value" id="ruralTax">0원</span>
+                </div>
+                <div class="breakdown-item" id="elderlyDeductionItem" style="display: none; background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="color: var(--secondary); font-weight: 600;">고령자 공제 (-)</span>
+                    <span class="breakdown-value" style="color: var(--secondary); font-weight: 600;" id="elderlyDeduction">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="taxInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);" id="warningBox">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text" id="warningText"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">📅</div>
+                <div class="info-text">
+                    <strong>납부 일정</strong><br>
+                    • 납부 기간: 12월 1일 ~ 12월 15일<br>
+                    • 분납 가능: 납부 세액 250만원 초과 시 50% 분납 가능 (6개월 후)
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼 이벤트
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateComprehensiveTax);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const totalPublicPriceInput = document.getElementById('totalPublicPrice');
+            if (totalPublicPriceInput) {
+                totalPublicPriceInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+
+                totalPublicPriceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateComprehensiveTax();
+                    }
+                });
+            }
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 종합부동산세 계산 함수
+        function calculateComprehensiveTax() {
+            const totalPublicPrice = parseInt(document.getElementById('totalPublicPrice').value) || 0;
+            
+            if (totalPublicPrice === 0) {
+                alert('주택 공시가격 총합을 입력해주세요.');
+                return;
+            }
+
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+            const regulated = document.querySelector('input[name="regulated"]:checked').value === 'yes';
+            const elderly = document.querySelector('input[name="elderly"]:checked').value;
+
+            // 1. 기본공제 결정
+            let basicDeduction = 0;
+            let infoMessage = '';
+            let warningMessage = '';
+
+            if (housingCount === 1) {
+                basicDeduction = 1200000000; // 12억
+                infoMessage = '1주택자 기본공제 12억원 적용';
+            } else if (housingCount === 2) {
+                basicDeduction = 900000000; // 9억
+                infoMessage = '2주택자 기본공제 9억원 적용';
+            } else {
+                basicDeduction = 600000000; // 6억
+                infoMessage = '3주택 이상 기본공제 6억원 적용';
+            }
+
+            // 2. 과세표준 계산
+            const taxableAmount = totalPublicPrice - basicDeduction;
+
+            if (taxableAmount <= 0) {
+                // 종부세 대상 아님
+                document.getElementById('totalTax').textContent = '0원';
+                document.getElementById('displayTotalPrice').textContent = formatCurrency(totalPublicPrice);
+                document.getElementById('basicDeduction').textContent = formatCurrency(basicDeduction);
+                document.getElementById('taxBase').textContent = '0원';
+                document.getElementById('taxRate').textContent = '-';
+                document.getElementById('baseTax').textContent = '0원';
+                document.getElementById('ruralTax').textContent = '0원';
+                document.getElementById('taxInfo').textContent = '주택 공시가격 합계가 종부세 과세 기준 미만입니다. 종부세가 부과되지 않습니다.';
+                document.getElementById('elderlyDeductionItem').style.display = 'none';
+                document.getElementById('warningBox').style.display = 'none';
+                
+                document.getElementById('resultSection').style.display = 'block';
+                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                return;
+            }
+
+            // 3. 종부세 본세 계산 (누진세율)
+            let baseTax = 0;
+            let effectiveRate = '';
+
+            if (housingCount === 1) {
+                // 1주택자 세율
+                if (taxableAmount <= 200000000) {
+                    baseTax = taxableAmount * 0.006; // 0.6%
+                    effectiveRate = '0.6%';
+                } else if (taxableAmount <= 400000000) {
+                    baseTax = taxableAmount * 0.008 - 400000;
+                    effectiveRate = '0.8%';
+                } else if (taxableAmount <= 600000000) {
+                    baseTax = taxableAmount * 0.012 - 2000000;
+                    effectiveRate = '1.2%';
+                } else if (taxableAmount <= 1200000000) {
+                    baseTax = taxableAmount * 0.014 - 3200000;
+                    effectiveRate = '1.4%';
+                } else {
+                    baseTax = taxableAmount * 0.020 - 10400000;
+                    effectiveRate = '2.0%';
+                }
+            } else {
+                // 2주택 이상
+                if (regulated) {
+                    // 조정지역 중과
+                    if (taxableAmount <= 200000000) {
+                        baseTax = taxableAmount * 0.012; // 1.2%
+                        effectiveRate = '1.2% (중과)';
+                    } else if (taxableAmount <= 400000000) {
+                        baseTax = taxableAmount * 0.016 - 800000;
+                        effectiveRate = '1.6% (중과)';
+                    } else if (taxableAmount <= 600000000) {
+                        baseTax = taxableAmount * 0.024 - 4000000;
+                        effectiveRate = '2.4% (중과)';
+                    } else if (taxableAmount <= 1200000000) {
+                        baseTax = taxableAmount * 0.030 - 7600000;
+                        effectiveRate = '3.0% (중과)';
+                    } else {
+                        baseTax = taxableAmount * 0.050 - 31600000;
+                        effectiveRate = '5.0% (중과)';
+                    }
+                    warningMessage = '조정대상지역 2주택 이상 보유로 종부세 중과세율이 적용됩니다.';
+                } else {
+                    // 일반지역
+                    if (taxableAmount <= 200000000) {
+                        baseTax = taxableAmount * 0.008; // 0.8%
+                        effectiveRate = '0.8%';
+                    } else if (taxableAmount <= 400000000) {
+                        baseTax = taxableAmount * 0.012 - 800000;
+                        effectiveRate = '1.2%';
+                    } else if (taxableAmount <= 600000000) {
+                        baseTax = taxableAmount * 0.020 - 4000000;
+                        effectiveRate = '2.0%';
+                    } else if (taxableAmount <= 1200000000) {
+                        baseTax = taxableAmount * 0.025 - 7000000;
+                        effectiveRate = '2.5%';
+                    } else {
+                        baseTax = taxableAmount * 0.040 - 25000000;
+                        effectiveRate = '4.0%';
+                    }
+                }
+            }
+
+            // 4. 농어촌특별세 (본세의 20%)
+            const ruralTax = baseTax * 0.2;
+
+            // 5. 고령자 공제 (1주택자만 해당)
+            let elderlyDeductionAmount = 0;
+            if (housingCount === 1 && elderly !== 'no') {
+                const totalBeforeDeduction = baseTax + ruralTax;
+                if (elderly === '60') {
+                    elderlyDeductionAmount = totalBeforeDeduction * 0.2; // 20%
+                    infoMessage += ' / 만 60세 이상 20% 공제 적용';
+                } else if (elderly === '65') {
+                    elderlyDeductionAmount = totalBeforeDeduction * 0.3; // 30%
+                    infoMessage += ' / 만 65세 이상 30% 공제 적용';
+                }
+            }
+
+            // 6. 총 종부세
+            const totalTax = baseTax + ruralTax - elderlyDeductionAmount;
+
+            // 결과 표시
+            document.getElementById('totalTax').textContent = formatKoreanCurrency(totalTax);
+            document.getElementById('displayTotalPrice').textContent = formatCurrency(totalPublicPrice);
+            document.getElementById('basicDeduction').textContent = formatCurrency(basicDeduction);
+            document.getElementById('taxBase').textContent = formatCurrency(taxableAmount);
+            document.getElementById('taxRate').textContent = effectiveRate;
+            document.getElementById('baseTax').textContent = formatCurrency(baseTax);
+            document.getElementById('ruralTax').textContent = formatCurrency(ruralTax);
+            document.getElementById('taxInfo').textContent = infoMessage;
+
+            // 고령자 공제 표시
+            const elderlyDeductionItem = document.getElementById('elderlyDeductionItem');
+            if (elderlyDeductionAmount > 0) {
+                elderlyDeductionItem.style.display = 'flex';
+                document.getElementById('elderlyDeduction').textContent = formatCurrency(elderlyDeductionAmount);
+            } else {
+                elderlyDeductionItem.style.display = 'none';
+            }
+
+            // 경고 메시지 표시
+            const warningBox = document.getElementById('warningBox');
+            if (warningMessage) {
+                warningBox.style.display = 'block';
+                document.getElementById('warningText').textContent = warningMessage;
+            } else {
+                warningBox.style.display = 'none';
+            }
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('totalPublicPrice').value = '';
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.querySelector('input[name="regulated"][value="no"]').checked = true;
+            document.querySelector('input[name="elderly"][value="no"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const totalTax = document.getElementById('totalTax').textContent;
+            const text = `부동산계산하기에서 종합부동산세를 계산했어요!\n총 종부세: ${totalTax}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '종부세 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

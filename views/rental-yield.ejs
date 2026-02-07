@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임대수익률 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/hold" class="back-button">
+            ← 집을 가지고 있어요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📈</div>
+            <h1 class="calculator-title">임대수익률 계산기</h1>
+            <p class="calculator-subtitle">월세 vs 전세 수익률을 비교합니다</p>
+        </div>
+
+        <!-- 임대수익률 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 임대수익률이란?
+            </div>
+            <div class="info-content">
+                투자한 부동산에서 연간 얼마나 수익이 발생하는지를 나타내는 지표입니다.
+                <br><br>
+                • <strong>표면수익률</strong>: 연간 임대료 ÷ 매입가 × 100<br>
+                • <strong>실질수익률</strong>: (연간 임대료 - 비용) ÷ 매입가 × 100<br>
+                • <strong>전세수익률</strong>: 전세금 × 이자율 ÷ 매입가 × 100
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 매입가 (또는 시세)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="purchasePrice" class="input-field" placeholder="예: 500000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택을 구매한 가격 또는 현재 시세</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">월세 임대 조건</h2>
+            
+            <div class="input-group">
+                <label class="input-label">월세 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="monthlyDeposit" class="input-field" placeholder="예: 50000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">월세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="monthlyRent" class="input-field" placeholder="예: 1000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">전세 임대 조건</h2>
+            
+            <div class="input-group">
+                <label class="input-label">전세 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="jeonseDeposit" class="input-field" placeholder="예: 400000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">전세금 운용 이자율 (연)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="interestRate" class="input-field" placeholder="3.5" inputmode="decimal" value="3.5">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">전세금을 예금 또는 투자 시 예상 수익률</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">비용 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">월간 관리비 (임대인 부담분)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="maintenanceFee" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">관리비 중 임대인이 부담하는 부분</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">연간 재산세 및 종부세</label>
+                <div class="input-wrapper">
+                    <input type="text" id="propertyTax" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">기타 연간 비용 (수리비 등)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="otherCost" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                수익률 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">📊 계산 결과</h2>
+            
+            <!-- 월세 수익률 -->
+            <div class="result-card total">
+                <div class="result-label">월세 실질수익률 (연)</div>
+                <div class="result-value" id="monthlyYield">0%</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">월세 수익 분석</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 월세 수입</span>
+                    <span class="breakdown-value" id="annualRent">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 관리비 (임대인 부담)</span>
+                    <span class="breakdown-value" id="annualMaintenance">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">재산세·종부세</span>
+                    <span class="breakdown-value" id="displayPropertyTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 비용</span>
+                    <span class="breakdown-value" id="displayOtherCost">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">순수익 (연간)</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="monthlyNetIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">표면수익률</span>
+                    <span class="breakdown-value" id="monthlyGrossYield">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">실질수익률</span>
+                    <span class="breakdown-value" id="monthlyNetYield">0%</span>
+                </div>
+            </div>
+
+            <!-- 전세 수익률 -->
+            <div class="result-card" style="background: linear-gradient(135deg, #697386 0%, #4A5568 100%); margin-top: 24px;">
+                <div class="result-label">전세 수익률 (연)</div>
+                <div class="result-value" id="jeonseYield">0%</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">전세 수익 분석</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전세금 운용 수익 (연간)</span>
+                    <span class="breakdown-value" id="jeonseIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">재산세·종부세</span>
+                    <span class="breakdown-value" id="jeonseTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 비용</span>
+                    <span class="breakdown-value" id="jeonseOtherCost">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(105, 115, 134, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">순수익 (연간)</span>
+                    <span class="breakdown-value" style="font-weight: 600;" id="jeonseNetIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전세 수익률</span>
+                    <span class="breakdown-value" id="jeonseNetYield">0%</span>
+                </div>
+            </div>
+
+            <!-- 비교 분석 -->
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">월세 vs 전세 비교</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">월세 순수익 (연)</span>
+                    <span class="breakdown-value" id="compareMonthly">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">전세 순수익 (연)</span>
+                    <span class="breakdown-value" id="compareJeonse">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">수익 차이 (연간)</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="incomeDiff">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">유리한 선택</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="recommendation">-</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="yieldInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>수익률 해석 가이드</strong><br>
+                    • 4% 이상: 우수한 수익률<br>
+                    • 3~4%: 양호한 수익률<br>
+                    • 2~3%: 보통 수익률<br>
+                    • 2% 미만: 낮은 수익률 (시세차익 기대 필요)
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateYield);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const numericInputs = ['purchasePrice', 'monthlyDeposit', 'monthlyRent', 'jeonseDeposit', 'maintenanceFee', 'propertyTax', 'otherCost'];
+            numericInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9]/g, '');
+                        e.target.value = value;
+                    });
+
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            calculateYield();
+                        }
+                    });
+                }
+            });
+
+            // 금리 입력 필드
+            const interestRateInput = document.getElementById('interestRate');
+            if (interestRateInput) {
+                interestRateInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9.]/g, '');
+                    const parts = value.split('.');
+                    if (parts.length > 2) {
+                        value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    e.target.value = value;
+                });
+
+                interestRateInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateYield();
+                    }
+                });
+            }
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 임대수익률 계산 함수
+        function calculateYield() {
+            const purchasePrice = parseInt(document.getElementById('purchasePrice').value) || 0;
+            const monthlyDeposit = parseInt(document.getElementById('monthlyDeposit').value) || 0;
+            const monthlyRent = parseInt(document.getElementById('monthlyRent').value) || 0;
+            const jeonseDeposit = parseInt(document.getElementById('jeonseDeposit').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 3.5;
+            const maintenanceFee = parseInt(document.getElementById('maintenanceFee').value) || 0;
+            const propertyTax = parseInt(document.getElementById('propertyTax').value) || 0;
+            const otherCost = parseInt(document.getElementById('otherCost').value) || 0;
+
+            if (purchasePrice === 0) {
+                alert('주택 매입가를 입력해주세요.');
+                return;
+            }
+
+            // === 월세 수익률 계산 ===
+            // 1. 연간 월세 수입
+            const annualRent = monthlyRent * 12;
+
+            // 2. 연간 비용
+            const annualMaintenance = maintenanceFee * 12;
+            const totalCost = annualMaintenance + propertyTax + otherCost;
+
+            // 3. 순수익
+            const monthlyNetIncome = annualRent - totalCost;
+
+            // 4. 수익률
+            const monthlyGrossYield = (annualRent / purchasePrice) * 100; // 표면수익률
+            const monthlyNetYield = (monthlyNetIncome / purchasePrice) * 100; // 실질수익률
+
+            // === 전세 수익률 계산 ===
+            // 1. 전세금 운용 수익 (이자)
+            const jeonseIncome = jeonseDeposit * (interestRate / 100);
+
+            // 2. 순수익 (전세는 관리비 없음)
+            const jeonseNetIncome = jeonseIncome - propertyTax - otherCost;
+
+            // 3. 수익률
+            const jeonseNetYield = (jeonseNetIncome / purchasePrice) * 100;
+
+            // === 비교 분석 ===
+            const incomeDiff = Math.abs(monthlyNetIncome - jeonseNetIncome);
+            let recommendation = '';
+            let yieldInfo = '';
+
+            if (monthlyNetIncome > jeonseNetIncome) {
+                recommendation = '월세 임대 (연 ' + formatCurrency(incomeDiff) + ' 더 수익)';
+                yieldInfo = '월세가 전세보다 연간 ' + formatKoreanCurrency(incomeDiff) + ' 더 유리합니다.';
+            } else if (monthlyNetIncome < jeonseNetIncome) {
+                recommendation = '전세 임대 (연 ' + formatCurrency(incomeDiff) + ' 더 수익)';
+                yieldInfo = '전세가 월세보다 연간 ' + formatKoreanCurrency(incomeDiff) + ' 더 유리합니다.';
+            } else {
+                recommendation = '동일 (선택 무관)';
+                yieldInfo = '월세와 전세의 수익이 동일합니다.';
+            }
+
+            // 월세 수익률이 우수한지 판단
+            if (monthlyNetYield >= 4) {
+                yieldInfo += ' 월세 수익률이 우수한 편입니다.';
+            } else if (monthlyNetYield >= 2) {
+                yieldInfo += ' 월세 수익률이 보통 수준입니다.';
+            } else if (monthlyNetYield > 0) {
+                yieldInfo += ' 월세 수익률이 낮은 편이므로 시세차익을 기대해야 합니다.';
+            }
+
+            // 결과 표시
+            document.getElementById('monthlyYield').textContent = monthlyNetYield.toFixed(2) + '%';
+            document.getElementById('annualRent').textContent = formatCurrency(annualRent);
+            document.getElementById('annualMaintenance').textContent = formatCurrency(annualMaintenance);
+            document.getElementById('displayPropertyTax').textContent = formatCurrency(propertyTax);
+            document.getElementById('displayOtherCost').textContent = formatCurrency(otherCost);
+            document.getElementById('monthlyNetIncome').textContent = formatCurrency(monthlyNetIncome);
+            document.getElementById('monthlyGrossYield').textContent = monthlyGrossYield.toFixed(2) + '%';
+            document.getElementById('monthlyNetYield').textContent = monthlyNetYield.toFixed(2) + '%';
+
+            document.getElementById('jeonseYield').textContent = jeonseNetYield.toFixed(2) + '%';
+            document.getElementById('jeonseIncome').textContent = formatCurrency(jeonseIncome);
+            document.getElementById('jeonseTax').textContent = formatCurrency(propertyTax);
+            document.getElementById('jeonseOtherCost').textContent = formatCurrency(otherCost);
+            document.getElementById('jeonseNetIncome').textContent = formatCurrency(jeonseNetIncome);
+            document.getElementById('jeonseNetYield').textContent = jeonseNetYield.toFixed(2) + '%';
+
+            document.getElementById('compareMonthly').textContent = formatCurrency(monthlyNetIncome);
+            document.getElementById('compareJeonse').textContent = formatCurrency(jeonseNetIncome);
+            document.getElementById('incomeDiff').textContent = formatCurrency(incomeDiff);
+            document.getElementById('recommendation').textContent = recommendation;
+            document.getElementById('yieldInfo').textContent = yieldInfo;
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('purchasePrice').value = '';
+            document.getElementById('monthlyDeposit').value = '';
+            document.getElementById('monthlyRent').value = '';
+            document.getElementById('jeonseDeposit').value = '';
+            document.getElementById('interestRate').value = '3.5';
+            document.getElementById('maintenanceFee').value = '0';
+            document.getElementById('propertyTax').value = '0';
+            document.getElementById('otherCost').value = '0';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const monthlyYield = document.getElementById('monthlyYield').textContent;
+            const jeonseYield = document.getElementById('jeonseYield').textContent;
+            const recommendation = document.getElementById('recommendation').textContent;
+            const text = `부동산계산하기에서 임대수익률을 계산했어요!\n월세 수익률: ${monthlyYield}\n전세 수익률: ${jeonseYield}\n추천: ${recommendation}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '임대수익률 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

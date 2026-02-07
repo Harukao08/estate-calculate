@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>등기비용 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/buy" class="back-button">
+            ← 집을 사려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📝</div>
+            <h1 class="calculator-title">등기비용 계산기</h1>
+            <p class="calculator-subtitle">소유권 이전등기 시 필요한 비용을 계산합니다</p>
+        </div>
+
+        <!-- 등기비용 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 등기비용이란?
+            </div>
+            <div class="info-content">
+                부동산 거래 시 소유권을 이전하기 위해 필요한 등기 관련 비용입니다. 
+                <strong>등록면허세</strong>(지방교육세 포함), <strong>국민주택채권 매입비</strong>, <strong>법무사 수수료</strong> 등으로 구성됩니다.
+                <br><br>
+                <small>※ 본 계산기는 일반적인 경우를 기준으로 하며, 실제 비용은 차이가 있을 수 있습니다.</small>
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">부동산 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">거래 금액</label>
+                <div class="input-wrapper">
+                    <input type="text" id="dealPrice" class="input-field" placeholder="예: 500000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">매매 거래가 또는 증여가액</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">등기 원인</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="registrationType" value="sale" checked>
+                        <span class="radio-label">매매</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="registrationType" value="gift">
+                        <span class="radio-label">증여</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="registrationType" value="inheritance">
+                        <span class="radio-label">상속</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 여부</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="isHouse" value="yes" checked>
+                        <span class="radio-label">주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="isHouse" value="no">
+                        <span class="radio-label">주택 외 (토지, 상가 등)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="bondSection" class="input-group">
+                <label class="input-label">국민주택채권 매입</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="bondPurchase" value="yes" checked>
+                        <span class="radio-label">매입 (일반적)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="bondPurchase" value="no">
+                        <span class="radio-label">면제 대상</span>
+                    </label>
+                </div>
+                <div class="input-helper">생애최초 주택 구매 등 일부 면제 대상이 있습니다</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                등기비용 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 등기비용 예상</div>
+                <div class="result-value" id="totalCost">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">세금 및 수수료</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">등록면허세</span>
+                    <span class="breakdown-value" id="registrationTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">지방교육세</span>
+                    <span class="breakdown-value" id="educationTax">0원</span>
+                </div>
+                <div class="breakdown-item" id="bondItem">
+                    <span class="breakdown-label">국민주택채권 매입비</span>
+                    <span class="breakdown-value" id="bondCost">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">법무사 수수료 (예상)</span>
+                    <span class="breakdown-value" id="lawyerFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 비용 (등기신청료 등)</span>
+                    <span class="breakdown-value" id="otherFee">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="registrationInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text">
+                    <strong>주의:</strong> 국민주택채권 매입비는 즉시 할인 매각하는 경우 실제 부담액이 약 90~95% 수준으로 줄어듭니다. 
+                    법무사 수수료는 지역과 법무사에 따라 차이가 있을 수 있습니다.
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼 이벤트
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateRegistrationCost);
+            }
+
+            // 리셋 버튼 이벤트
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼 이벤트
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const dealPriceInput = document.getElementById('dealPrice');
+            if (dealPriceInput) {
+                dealPriceInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+
+                // 엔터 키로 계산
+                dealPriceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateRegistrationCost();
+                    }
+                });
+            }
+
+            // 주택 여부에 따라 채권 섹션 표시/숨김
+            const isHouseInputs = document.querySelectorAll('input[name="isHouse"]');
+            isHouseInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const bondSection = document.getElementById('bondSection');
+                    if (this.value === 'yes') {
+                        bondSection.style.display = 'block';
+                    } else {
+                        bondSection.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        // 원 단위 표시
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        // 억/만 단위 표시
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 등기비용 계산 함수
+        function calculateRegistrationCost() {
+            const dealPrice = parseInt(document.getElementById('dealPrice').value) || 0;
+            
+            if (dealPrice === 0) {
+                alert('거래 금액을 입력해주세요.');
+                return;
+            }
+
+            const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
+            const isHouse = document.querySelector('input[name="isHouse"]:checked').value === 'yes';
+            const bondPurchase = document.querySelector('input[name="bondPurchase"]:checked').value === 'yes';
+
+            let registrationTaxRate = 0;
+            let bondRate = 0;
+            let infoMessage = '';
+
+            // 1. 등록면허세 계산
+            if (registrationType === 'sale') {
+                // 매매
+                registrationTaxRate = 0.02; // 2%
+                infoMessage = '매매로 인한 소유권이전등기: 등록면허세 2%';
+            } else if (registrationType === 'gift') {
+                // 증여
+                registrationTaxRate = 0.03; // 3%
+                infoMessage = '증여로 인한 소유권이전등기: 등록면허세 3%';
+            } else {
+                // 상속
+                registrationTaxRate = 0.015; // 1.5%
+                infoMessage = '상속로 인한 소유권이전등기: 등록면허세 1.5%';
+            }
+
+            const registrationTax = dealPrice * registrationTaxRate;
+            
+            // 2. 지방교육세 (등록면허세의 20%)
+            const educationTax = registrationTax * 0.2;
+
+            // 3. 국민주택채권 매입비
+            let bondCost = 0;
+            if (isHouse && bondPurchase) {
+                // 주택의 경우 채권 매입 필요
+                if (dealPrice < 600000000) {
+                    bondRate = 0.012; // 1.2%
+                } else {
+                    bondRate = 0.014; // 1.4%
+                }
+                bondCost = dealPrice * bondRate;
+                
+                // 즉시 할인 매각 시 실제 부담액 (약 5~10% 할인)
+                // 여기서는 명목가액 표시
+            }
+
+            // 4. 법무사 수수료 (예상)
+            let lawyerFee = 0;
+            if (dealPrice < 100000000) {
+                lawyerFee = 500000; // 50만원
+            } else if (dealPrice < 300000000) {
+                lawyerFee = 700000; // 70만원
+            } else if (dealPrice < 600000000) {
+                lawyerFee = 1000000; // 100만원
+            } else if (dealPrice < 900000000) {
+                lawyerFee = 1300000; // 130만원
+            } else {
+                lawyerFee = 1500000; // 150만원
+            }
+
+            // 5. 기타 비용 (등기신청료, 등본 발급 등)
+            const otherFee = 50000; // 약 5만원
+
+            // 총 비용 계산
+            const totalCost = registrationTax + educationTax + bondCost + lawyerFee + otherFee;
+
+            // 결과 표시
+            document.getElementById('totalCost').textContent = formatKoreanCurrency(totalCost);
+            document.getElementById('registrationTax').textContent = formatCurrency(registrationTax);
+            document.getElementById('educationTax').textContent = formatCurrency(educationTax);
+            document.getElementById('bondCost').textContent = formatCurrency(bondCost);
+            document.getElementById('lawyerFee').textContent = formatCurrency(lawyerFee);
+            document.getElementById('otherFee').textContent = formatCurrency(otherFee);
+            document.getElementById('registrationInfo').textContent = infoMessage;
+
+            // 채권 항목 표시/숨김
+            const bondItem = document.getElementById('bondItem');
+            if (isHouse && bondPurchase) {
+                bondItem.style.display = 'flex';
+            } else {
+                bondItem.style.display = 'none';
+            }
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('dealPrice').value = '';
+            document.querySelector('input[name="registrationType"][value="sale"]').checked = true;
+            document.querySelector('input[name="isHouse"][value="yes"]').checked = true;
+            document.querySelector('input[name="bondPurchase"][value="yes"]').checked = true;
+            document.getElementById('bondSection').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const totalCost = document.getElementById('totalCost').textContent;
+            const text = `부동산계산하기에서 등기비용을 계산했어요!\n총 등기비용 예상: ${totalCost}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '등기비용 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

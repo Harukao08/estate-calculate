@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재산세 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/hold" class="back-button">
+            ← 집을 가지고 있어요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🏘️</div>
+            <h1 class="calculator-title">재산세 계산기</h1>
+            <p class="calculator-subtitle">주택 보유 시 매년 내는 재산세를 계산합니다</p>
+        </div>
+
+        <!-- 재산세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 재산세란?
+            </div>
+            <div class="info-content">
+                재산세는 부동산을 보유한 모든 사람이 내는 지방세입니다.
+                <br><br>
+                • <strong>과세기준일</strong>: 매년 6월 1일 (이 날 기준 소유자가 납부)<br>
+                • <strong>납부 시기</strong>: 7월 (1~15일), 9월 (16~30일) 2회 분납<br>
+                • <strong>과세표준</strong>: 공시가격 × 60% (공정시장가액비율)
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 공시가격</label>
+                <div class="input-wrapper">
+                    <input type="text" id="publicPrice" class="input-field" placeholder="예: 600000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">국토교통부 부동산공시가격알리미에서 확인 가능</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 종류</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="house" checked>
+                        <span class="radio-label">주택 (일반)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="apartment">
+                        <span class="radio-label">아파트</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="villa">
+                        <span class="radio-label">빌라/연립</span>
+                    </label>
+                </div>
+                <div class="input-helper">세율은 동일하며, 감면 혜택 차이가 있을 수 있습니다</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">1세대 1주택 여부</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="singleHouse" value="yes">
+                        <span class="radio-label">1세대 1주택 (감면 대상)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="singleHouse" value="no" checked>
+                        <span class="radio-label">다주택 또는 비해당</span>
+                    </label>
+                </div>
+                <div class="input-helper">1세대 1주택은 재산세 감면 혜택이 있습니다</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                재산세 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">연간 총 재산세</div>
+                <div class="result-value" id="totalTax">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">세액 상세</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주택 공시가격</span>
+                    <span class="breakdown-value" id="displayPublicPrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">과세표준 (공시가 × 60%)</span>
+                    <span class="breakdown-value" id="taxBase">0원</span>
+                </div>
+                <div class="breakdown-item" style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px;">
+                    <span class="breakdown-label">재산세 본세</span>
+                    <span class="breakdown-value" id="baseTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">도시지역분 (본세 × 14%)</span>
+                    <span class="breakdown-value" id="urbanTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">지방교육세 (본세 × 20%)</span>
+                    <span class="breakdown-value" id="educationTax">0원</span>
+                </div>
+                <div class="breakdown-item" id="deductionItem" style="display: none; background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="color: var(--secondary); font-weight: 600;">1세대 1주택 감면 (-)</span>
+                    <span class="breakdown-value" style="color: var(--secondary); font-weight: 600;" id="deduction">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">납부 일정</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">7월 납부분 (1~15일 주택)</span>
+                    <span class="breakdown-value" id="julyPayment">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">9월 납부분 (16~30일 주택)</span>
+                    <span class="breakdown-value" id="septPayment">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="taxInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>재산세 절세 팁</strong><br>
+                    • 1세대 1주택: 공시가 6억 이하 시 최대 10만원 감면<br>
+                    • 고령자 감면: 만 60세 이상 20%, 만 65세 이상 30%<br>
+                    • 장기보유 공제는 재산세가 아닌 양도세에 적용됩니다
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼 이벤트
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculatePropertyTax);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const publicPriceInput = document.getElementById('publicPrice');
+            if (publicPriceInput) {
+                publicPriceInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+
+                publicPriceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculatePropertyTax();
+                    }
+                });
+            }
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 재산세 계산 함수
+        function calculatePropertyTax() {
+            const publicPrice = parseInt(document.getElementById('publicPrice').value) || 0;
+            
+            if (publicPrice === 0) {
+                alert('주택 공시가격을 입력해주세요.');
+                return;
+            }
+
+            const houseType = document.querySelector('input[name="houseType"]:checked').value;
+            const singleHouse = document.querySelector('input[name="singleHouse"]:checked').value === 'yes';
+
+            // 1. 과세표준 계산 (공시가격 × 60%)
+            const taxBase = publicPrice * 0.6;
+
+            // 2. 재산세 본세 계산 (누진세율)
+            let baseTax = 0;
+            let taxRate = 0;
+            let infoMessage = '';
+
+            if (taxBase <= 60000000) {
+                // 6천만원 이하: 0.1%
+                baseTax = taxBase * 0.001;
+                taxRate = 0.1;
+                infoMessage = '과세표준 6천만원 이하: 0.1% 세율 적용';
+            } else if (taxBase <= 150000000) {
+                // 6천~1.5억원: 0.15%
+                baseTax = taxBase * 0.0015 - 30000;
+                taxRate = 0.15;
+                infoMessage = '과세표준 6천만원~1.5억원: 0.15% 세율 적용';
+            } else if (taxBase <= 300000000) {
+                // 1.5억~3억원: 0.25%
+                baseTax = taxBase * 0.0025 - 180000;
+                taxRate = 0.25;
+                infoMessage = '과세표준 1.5억~3억원: 0.25% 세율 적용';
+            } else {
+                // 3억원 초과: 0.4%
+                baseTax = taxBase * 0.004 - 630000;
+                taxRate = 0.4;
+                infoMessage = '과세표준 3억원 초과: 0.4% 세율 적용';
+            }
+
+            // 3. 부가세 계산
+            const urbanTax = baseTax * 0.14; // 도시지역분 14%
+            const educationTax = baseTax * 0.2; // 지방교육세 20%
+
+            // 4. 1세대 1주택 감면
+            let deduction = 0;
+            if (singleHouse && publicPrice <= 600000000) {
+                // 공시가 6억 이하 1세대 1주택 감면
+                if (publicPrice <= 300000000) {
+                    // 3억 이하: 전액의 50% 감면
+                    deduction = (baseTax + urbanTax + educationTax) * 0.5;
+                    if (deduction > 100000) deduction = 100000;
+                    infoMessage += ' (1세대 1주택 감면 적용: 최대 10만원)';
+                } else {
+                    // 3억~6억: 감면액 점진적 감소
+                    const baseDeduction = (baseTax + urbanTax + educationTax) * 0.5;
+                    const reductionRate = (publicPrice - 300000000) / 300000000;
+                    deduction = baseDeduction * (1 - reductionRate);
+                    if (deduction > 100000) deduction = 100000;
+                    infoMessage += ' (1세대 1주택 감면 적용)';
+                }
+            }
+
+            // 5. 총 재산세 계산
+            const totalBeforeDeduction = baseTax + urbanTax + educationTax;
+            const totalTax = totalBeforeDeduction - deduction;
+
+            // 6. 납부 일정 (7월, 9월 분납)
+            const julyPayment = totalTax / 2;
+            const septPayment = totalTax / 2;
+
+            // 결과 표시
+            document.getElementById('totalTax').textContent = formatKoreanCurrency(totalTax);
+            document.getElementById('displayPublicPrice').textContent = formatCurrency(publicPrice);
+            document.getElementById('taxBase').textContent = formatCurrency(taxBase);
+            document.getElementById('baseTax').textContent = formatCurrency(baseTax);
+            document.getElementById('urbanTax').textContent = formatCurrency(urbanTax);
+            document.getElementById('educationTax').textContent = formatCurrency(educationTax);
+            document.getElementById('julyPayment').textContent = formatCurrency(julyPayment);
+            document.getElementById('septPayment').textContent = formatCurrency(septPayment);
+            document.getElementById('taxInfo').textContent = infoMessage;
+
+            // 감면 항목 표시/숨김
+            const deductionItem = document.getElementById('deductionItem');
+            if (deduction > 0) {
+                deductionItem.style.display = 'flex';
+                document.getElementById('deduction').textContent = formatCurrency(deduction);
+            } else {
+                deductionItem.style.display = 'none';
+            }
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('publicPrice').value = '';
+            document.querySelector('input[name="houseType"][value="house"]').checked = true;
+            document.querySelector('input[name="singleHouse"][value="no"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const totalTax = document.getElementById('totalTax').textContent;
+            const julyPayment = document.getElementById('julyPayment').textContent;
+            const text = `부동산계산하기에서 재산세를 계산했어요!\n연간 총 재산세: ${totalTax}\n7월 납부액: ${julyPayment}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '재산세 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

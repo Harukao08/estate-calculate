@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임대소득세 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/hold" class="back-button">
+            ← 집을 가지고 있어요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🏦</div>
+            <h1 class="calculator-title">임대소득세 계산기</h1>
+            <p class="calculator-subtitle">월세 수입에 대한 세금을 계산합니다</p>
+        </div>
+
+        <!-- 임대소득세 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 임대소득세란?
+            </div>
+            <div class="info-content">
+                주택을 임대하여 발생한 소득에 대해 내는 세금입니다.
+                <br><br>
+                • <strong>과세 대상</strong>: 연간 임대소득 2천만원 초과 (필수 신고)<br>
+                • <strong>분리과세</strong>: 연간 2천만원 이하 시 14% 단일세율 선택 가능<br>
+                • <strong>종합과세</strong>: 다른 소득과 합산하여 누진세율 적용<br>
+                • <strong>신고 기간</strong>: 매년 5월 종합소득세 신고
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">임대 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">월세 금액</label>
+                <div class="input-wrapper">
+                    <input type="text" id="monthlyRent" class="input-field" placeholder="예: 1000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">매월 받는 월세 금액</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="deposit" class="input-field" placeholder="예: 50000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">전세 보증금 또는 월세 보증금</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">임대 주택 수</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="houseCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">임대 기간</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="rentalPeriod" value="12" checked>
+                        <span class="radio-label">1년 (12개월)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="rentalPeriod" value="6">
+                        <span class="radio-label">6개월</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="rentalPeriod" value="custom">
+                        <span class="radio-label">직접 입력</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="customPeriodSection" class="input-group" style="display: none;">
+                <label class="input-label">임대 개월 수</label>
+                <div class="input-wrapper">
+                    <input type="text" id="customPeriod" class="input-field" placeholder="예: 3" inputmode="numeric">
+                    <span class="input-suffix">개월</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">기타 소득 및 공제</h2>
+            
+            <div class="input-group">
+                <label class="input-label">기타 종합소득 (연간)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="otherIncome" class="input-field" placeholder="0" inputmode="numeric" value="0">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">근로소득, 사업소득 등 (종합과세 비교용)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">필요경비율</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="expenseRate" value="basic" checked>
+                        <span class="radio-label">기본 공제 (50%)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="expenseRate" value="registered">
+                        <span class="radio-label">등록임대 (60%)</span>
+                    </label>
+                </div>
+                <div class="input-helper">임대사업자 등록 시 60% 공제</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                임대소득세 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <!-- 분리과세 결과 -->
+            <div class="result-card total">
+                <div class="result-label">분리과세 선택 시 (14%)</div>
+                <div class="result-value" id="separateTax">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">분리과세 계산 과정</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 월세 수입</span>
+                    <span class="breakdown-value" id="annualRent">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">간주임대료 (보증금)</span>
+                    <span class="breakdown-value" id="depositIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">총 임대소득</span>
+                    <span class="breakdown-value" id="totalRentalIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">필요경비 공제 (-)</span>
+                    <span class="breakdown-value" id="expense">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 600;">과세표준</span>
+                    <span class="breakdown-value" style="font-weight: 600; color: var(--primary);" id="separateTaxBase">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">소득세 (14%)</span>
+                    <span class="breakdown-value" id="separateIncomeTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">지방소득세 (1.4%)</span>
+                    <span class="breakdown-value" id="separateLocalTax">0원</span>
+                </div>
+            </div>
+
+            <!-- 종합과세 결과 -->
+            <div class="result-card" style="background: linear-gradient(135deg, #697386 0%, #4A5568 100%); margin-top: 24px;">
+                <div class="result-label">종합과세 선택 시 (누진세율)</div>
+                <div class="result-value" id="comprehensiveTax">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">종합과세 계산 (참고)</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">임대소득 과세표준</span>
+                    <span class="breakdown-value" id="comprehensiveRentalBase">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">기타 종합소득</span>
+                    <span class="breakdown-value" id="displayOtherIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">총 과세표준</span>
+                    <span class="breakdown-value" id="comprehensiveTaxBase">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">종합소득세 (누진)</span>
+                    <span class="breakdown-value" id="comprehensiveIncomeTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">지방소득세</span>
+                    <span class="breakdown-value" id="comprehensiveLocalTax">0원</span>
+                </div>
+            </div>
+
+            <!-- 비교 분석 -->
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">세금 비교 분석</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">분리과세 선택 시</span>
+                    <span class="breakdown-value" id="compareSeparate">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">종합과세 선택 시</span>
+                    <span class="breakdown-value" id="compareComprehensive">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">유리한 선택</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="recommendation">-</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="taxInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);" id="warningBox">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text" id="warningText"></div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateRentalIncomeTax);
+            }
+
+            // 리셋 버튼
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // 공유 버튼
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드 포맷팅
+            ['monthlyRent', 'deposit', 'otherIncome', 'customPeriod'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9]/g, '');
+                        e.target.value = value;
+                    });
+
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            calculateRentalIncomeTax();
+                        }
+                    });
+                }
+            });
+
+            // 임대 기간 선택
+            const rentalPeriodInputs = document.querySelectorAll('input[name="rentalPeriod"]');
+            rentalPeriodInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const customSection = document.getElementById('customPeriodSection');
+                    if (this.value === 'custom') {
+                        customSection.style.display = 'block';
+                    } else {
+                        customSection.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // 종합소득세 누진세율 계산
+        function calculateProgressiveTax(taxBase) {
+            let tax = 0;
+            if (taxBase <= 14000000) {
+                tax = taxBase * 0.06;
+            } else if (taxBase <= 50000000) {
+                tax = taxBase * 0.15 - 1260000;
+            } else if (taxBase <= 88000000) {
+                tax = taxBase * 0.24 - 5760000;
+            } else if (taxBase <= 150000000) {
+                tax = taxBase * 0.35 - 15440000;
+            } else if (taxBase <= 300000000) {
+                tax = taxBase * 0.38 - 19940000;
+            } else if (taxBase <= 500000000) {
+                tax = taxBase * 0.40 - 25940000;
+            } else if (taxBase <= 1000000000) {
+                tax = taxBase * 0.42 - 35940000;
+            } else {
+                tax = taxBase * 0.45 - 65940000;
+            }
+            return tax;
+        }
+
+        // 임대소득세 계산 함수
+        function calculateRentalIncomeTax() {
+            const monthlyRent = parseInt(document.getElementById('monthlyRent').value) || 0;
+            const deposit = parseInt(document.getElementById('deposit').value) || 0;
+            const otherIncome = parseInt(document.getElementById('otherIncome').value) || 0;
+            const expenseRate = document.querySelector('input[name="expenseRate"]:checked').value;
+            const rentalPeriodValue = document.querySelector('input[name="rentalPeriod"]:checked').value;
+            
+            if (monthlyRent === 0 && deposit === 0) {
+                alert('월세 금액 또는 보증금을 입력해주세요.');
+                return;
+            }
+
+            // 임대 기간 결정
+            let rentalMonths = 12;
+            if (rentalPeriodValue === 'custom') {
+                rentalMonths = parseInt(document.getElementById('customPeriod').value) || 12;
+            } else {
+                rentalMonths = parseInt(rentalPeriodValue);
+            }
+
+            // 1. 연간 월세 수입
+            const annualRent = monthlyRent * rentalMonths;
+
+            // 2. 간주임대료 계산 (보증금이 3억 초과 시)
+            let depositIncome = 0;
+            if (deposit > 300000000) {
+                const excessDeposit = deposit - 300000000;
+                const interestRate = 0.025; // 2.5% (2026년 기준)
+                depositIncome = excessDeposit * interestRate * (rentalMonths / 12);
+            }
+
+            // 3. 총 임대소득
+            const totalRentalIncome = annualRent + depositIncome;
+
+            // 4. 필요경비 공제
+            let expenseRateValue = 0.5; // 기본 50%
+            if (expenseRate === 'registered') {
+                expenseRateValue = 0.6; // 등록임대 60%
+            }
+            const expense = totalRentalIncome * expenseRateValue;
+
+            // 5. 과세표준
+            const rentalTaxBase = totalRentalIncome - expense;
+
+            // === 분리과세 계산 (14%) ===
+            const separateIncomeTax = rentalTaxBase * 0.14;
+            const separateLocalTax = separateIncomeTax * 0.1; // 지방소득세 10%
+            const separateTaxTotal = separateIncomeTax + separateLocalTax;
+
+            // === 종합과세 계산 ===
+            const comprehensiveTaxBase = rentalTaxBase + otherIncome;
+            const comprehensiveIncomeTax = calculateProgressiveTax(comprehensiveTaxBase);
+            const comprehensiveLocalTax = comprehensiveIncomeTax * 0.1;
+            const comprehensiveTaxTotal = comprehensiveIncomeTax + comprehensiveLocalTax;
+
+            // 안내 메시지
+            let infoMessage = '';
+            let warningMessage = '';
+            let recommendation = '';
+
+            if (totalRentalIncome <= 20000000) {
+                infoMessage = '연간 임대소득 2천만원 이하로 분리과세(14%) 선택 가능합니다.';
+            } else {
+                infoMessage = '연간 임대소득 2천만원 초과로 종합과세 필수입니다.';
+                warningMessage = '연간 임대소득이 2천만원을 초과하여 종합과세로 신고해야 합니다. 분리과세 선택이 불가능합니다.';
+            }
+
+            // 유리한 선택 판단
+            if (totalRentalIncome <= 20000000) {
+                if (separateTaxTotal < comprehensiveTaxTotal) {
+                    recommendation = '분리과세 (세금 ' + formatCurrency(comprehensiveTaxTotal - separateTaxTotal) + ' 절감)';
+                } else if (separateTaxTotal > comprehensiveTaxTotal) {
+                    recommendation = '종합과세 (세금 ' + formatCurrency(separateTaxTotal - comprehensiveTaxTotal) + ' 절감)';
+                } else {
+                    recommendation = '동일 (선택 무관)';
+                }
+            } else {
+                recommendation = '종합과세 필수 (2천만원 초과)';
+            }
+
+            // 결과 표시
+            document.getElementById('separateTax').textContent = formatKoreanCurrency(separateTaxTotal);
+            document.getElementById('annualRent').textContent = formatCurrency(annualRent);
+            document.getElementById('depositIncome').textContent = formatCurrency(depositIncome);
+            document.getElementById('totalRentalIncome').textContent = formatCurrency(totalRentalIncome);
+            document.getElementById('expense').textContent = formatCurrency(expense);
+            document.getElementById('separateTaxBase').textContent = formatCurrency(rentalTaxBase);
+            document.getElementById('separateIncomeTax').textContent = formatCurrency(separateIncomeTax);
+            document.getElementById('separateLocalTax').textContent = formatCurrency(separateLocalTax);
+
+            document.getElementById('comprehensiveTax').textContent = formatKoreanCurrency(comprehensiveTaxTotal);
+            document.getElementById('comprehensiveRentalBase').textContent = formatCurrency(rentalTaxBase);
+            document.getElementById('displayOtherIncome').textContent = formatCurrency(otherIncome);
+            document.getElementById('comprehensiveTaxBase').textContent = formatCurrency(comprehensiveTaxBase);
+            document.getElementById('comprehensiveIncomeTax').textContent = formatCurrency(comprehensiveIncomeTax);
+            document.getElementById('comprehensiveLocalTax').textContent = formatCurrency(comprehensiveLocalTax);
+
+            document.getElementById('compareSeparate').textContent = formatCurrency(separateTaxTotal);
+            document.getElementById('compareComprehensive').textContent = formatCurrency(comprehensiveTaxTotal);
+            document.getElementById('recommendation').textContent = recommendation;
+
+            document.getElementById('taxInfo').textContent = infoMessage;
+
+            // 경고 메시지
+            const warningBox = document.getElementById('warningBox');
+            if (warningMessage) {
+                warningBox.style.display = 'block';
+                document.getElementById('warningText').textContent = warningMessage;
+            } else {
+                warningBox.style.display = 'none';
+            }
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('monthlyRent').value = '';
+            document.getElementById('deposit').value = '';
+            document.getElementById('otherIncome').value = '0';
+            document.getElementById('customPeriod').value = '';
+            document.querySelector('input[name="houseCount"][value="1"]').checked = true;
+            document.querySelector('input[name="rentalPeriod"][value="12"]').checked = true;
+            document.querySelector('input[name="expenseRate"][value="basic"]').checked = true;
+            document.getElementById('customPeriodSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const separateTax = document.getElementById('separateTax').textContent;
+            const recommendation = document.getElementById('recommendation').textContent;
+            const text = `부동산계산하기에서 임대소득세를 계산했어요!\n분리과세: ${separateTax}\n추천: ${recommendation}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '임대소득세 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

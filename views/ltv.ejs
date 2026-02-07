@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주택담보대출 한도 (LTV) 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/buy" class="back-button">
+            ← 집을 사려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🏦</div>
+            <h1 class="calculator-title">주택담보대출 한도 (LTV)</h1>
+            <p class="calculator-subtitle">주택 가격 대비 대출 가능한 금액을 계산합니다</p>
+        </div>
+
+        <!-- LTV 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 LTV(주택담보인정비율)란?
+            </div>
+            <div class="info-content">
+                LTV는 주택 가격 대비 대출 가능한 비율입니다. 
+                주택 가격, 지역, 보유 주택 수에 따라 30%~80%까지 다양하게 적용됩니다.
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 가격 (KB시세 또는 매매가)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="housePrice" class="input-field" placeholder="예: 500000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">KB시세, 실거래가, 감정가 중 낮은 금액</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 유형</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="apartment" checked>
+                        <span class="radio-label">아파트</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="house">
+                        <span class="radio-label">일반주택 (단독/연립/빌라)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 가격대</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="priceRange" value="under6" checked>
+                        <span class="radio-label">6억 이하</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="priceRange" value="6to9">
+                        <span class="radio-label">6억 초과 ~ 9억 이하</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="priceRange" value="over9">
+                        <span class="radio-label">9억 초과</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">보유 주택 현황</h2>
+            
+            <div class="input-group">
+                <label class="input-label">보유 주택 수 (구매 후 기준)</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택 (생애최초 포함)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 소재지</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="regulated" checked>
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="normal">
+                        <span class="radio-label">일반지역 (비규제)</span>
+                    </label>
+                </div>
+                <div class="input-helper">서울 대부분 지역, 수도권 일부가 조정대상지역입니다</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">대출 용도</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="loanPurpose" value="purchase" checked>
+                        <span class="radio-label">주택 구매</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="loanPurpose" value="jeonse">
+                        <span class="radio-label">전세자금</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                LTV 한도 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">💰 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">최대 대출 가능 금액</div>
+                <div class="result-value" id="maxLoanAmount">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">LTV 상세 정보</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">주택 가격</span>
+                    <span class="breakdown-value" id="displayHousePrice">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">적용 LTV 비율</span>
+                    <span class="breakdown-value" id="ltvRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">대출 한도</span>
+                    <span class="breakdown-value" id="ltvLimit">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">필요 자기자본</span>
+                    <span class="breakdown-value" id="ownCapital">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="ltvInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text">
+                    <strong>주의:</strong> 실제 대출 가능 금액은 LTV와 DSR 중 낮은 금액이 적용됩니다. 
+                    소득이 부족하면 LTV 한도보다 적게 대출받을 수 있습니다.
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="dsrButton">
+                    DSR 계산하러 가기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 계산 버튼 이벤트
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateLTV);
+            }
+
+            // 리셋 버튼 이벤트
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            // DSR 이동 버튼
+            const dsrButton = document.getElementById('dsrButton');
+            if (dsrButton) {
+                dsrButton.addEventListener('click', function() {
+                    window.location.href = '/calculator/dsr';
+                });
+            }
+
+            // 숫자 입력 필드 포맷팅
+            const housePriceInput = document.getElementById('housePrice');
+            if (housePriceInput) {
+                housePriceInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    e.target.value = value;
+                });
+
+                // 엔터 키로 계산
+                housePriceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateLTV();
+                    }
+                });
+            }
+
+            // 가격대 자동 선택
+            if (housePriceInput) {
+                housePriceInput.addEventListener('blur', function() {
+                    const price = parseInt(this.value) || 0;
+                    if (price > 0) {
+                        if (price <= 600000000) {
+                            document.querySelector('input[name="priceRange"][value="under6"]').checked = true;
+                        } else if (price <= 900000000) {
+                            document.querySelector('input[name="priceRange"][value="6to9"]').checked = true;
+                        } else {
+                            document.querySelector('input[name="priceRange"][value="over9"]').checked = true;
+                        }
+                    }
+                });
+            }
+        });
+
+        // 숫자 포맷팅
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        // 원 단위 표시
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        // 억/만 단위 표시
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        // LTV 계산 함수
+        function calculateLTV() {
+            const housePrice = parseInt(document.getElementById('housePrice').value) || 0;
+            
+            if (housePrice === 0) {
+                alert('주택 가격을 입력해주세요.');
+                return;
+            }
+
+            const houseType = document.querySelector('input[name="houseType"]:checked').value;
+            const priceRange = document.querySelector('input[name="priceRange"]:checked').value;
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+            const location = document.querySelector('input[name="location"]:checked').value;
+            const loanPurpose = document.querySelector('input[name="loanPurpose"]:checked').value;
+
+            let ltvRate = 0;
+            let infoMessage = '';
+
+            // LTV 비율 결정
+            if (loanPurpose === 'jeonse') {
+                // 전세자금 대출
+                if (priceRange === 'under6') {
+                    ltvRate = 0.8; // 80%
+                    infoMessage = '6억 이하 전세자금 대출로 LTV 80%가 적용됩니다.';
+                } else if (priceRange === '6to9') {
+                    ltvRate = 0.7; // 70%
+                    infoMessage = '6~9억 전세자금 대출로 LTV 70%가 적용됩니다.';
+                } else {
+                    ltvRate = 0.6; // 60%
+                    infoMessage = '9억 초과 전세자금 대출로 LTV 60%가 적용됩니다.';
+                }
+            } else {
+                // 주택 구매 대출
+                if (housingCount === 1) {
+                    // 1주택 (생애최초 포함)
+                    if (location === 'regulated') {
+                        // 조정대상지역
+                        if (priceRange === 'under6') {
+                            ltvRate = 0.5; // 50%
+                            infoMessage = '조정대상지역 1주택, 6억 이하로 LTV 50%가 적용됩니다.';
+                        } else if (priceRange === '6to9') {
+                            ltvRate = 0.3; // 30%
+                            infoMessage = '조정대상지역 1주택, 6~9억으로 LTV 30%가 적용됩니다.';
+                        } else {
+                            ltvRate = 0.3; // 30%
+                            infoMessage = '조정대상지역 1주택, 9억 초과로 LTV 30%가 적용됩니다.';
+                        }
+                    } else {
+                        // 일반지역
+                        if (priceRange === 'under6') {
+                            ltvRate = 0.7; // 70%
+                            infoMessage = '일반지역 1주택, 6억 이하로 LTV 70%가 적용됩니다.';
+                        } else if (priceRange === '6to9') {
+                            ltvRate = 0.6; // 60%
+                            infoMessage = '일반지역 1주택, 6~9억으로 LTV 60%가 적용됩니다.';
+                        } else {
+                            ltvRate = 0.5; // 50%
+                            infoMessage = '일반지역 1주택, 9억 초과로 LTV 50%가 적용됩니다.';
+                        }
+                    }
+                } else if (housingCount === 2) {
+                    // 2주택
+                    if (location === 'regulated') {
+                        // 조정대상지역 2주택
+                        ltvRate = 0.3; // 30%
+                        infoMessage = '조정대상지역 2주택으로 LTV 30%가 적용됩니다.';
+                    } else {
+                        // 일반지역 2주택
+                        if (priceRange === 'under6') {
+                            ltvRate = 0.6; // 60%
+                            infoMessage = '일반지역 2주택, 6억 이하로 LTV 60%가 적용됩니다.';
+                        } else {
+                            ltvRate = 0.5; // 50%
+                            infoMessage = '일반지역 2주택, 6억 초과로 LTV 50%가 적용됩니다.';
+                        }
+                    }
+                } else {
+                    // 3주택 이상
+                    if (location === 'regulated') {
+                        ltvRate = 0; // 0% (대출 불가)
+                        infoMessage = '조정대상지역 3주택 이상은 주택담보대출이 불가능합니다.';
+                    } else {
+                        ltvRate = 0.3; // 30%
+                        infoMessage = '일반지역 3주택 이상으로 LTV 30%가 적용됩니다.';
+                    }
+                }
+            }
+
+            // 대출 한도 계산
+            const maxLoan = housePrice * ltvRate;
+            const ownCapital = housePrice - maxLoan;
+
+            // 결과 표시
+            document.getElementById('maxLoanAmount').textContent = formatKoreanCurrency(maxLoan);
+            document.getElementById('displayHousePrice').textContent = formatCurrency(housePrice);
+            document.getElementById('ltvRate').textContent = (ltvRate * 100) + '%';
+            document.getElementById('ltvLimit').textContent = formatCurrency(maxLoan);
+            document.getElementById('ownCapital').textContent = formatCurrency(ownCapital);
+            document.getElementById('ltvInfo').textContent = infoMessage;
+
+            // 결과 섹션 표시
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 계산기 리셋
+        function resetCalculator() {
+            document.getElementById('housePrice').value = '';
+            document.querySelector('input[name="houseType"][value="apartment"]').checked = true;
+            document.querySelector('input[name="priceRange"][value="under6"]').checked = true;
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.querySelector('input[name="location"][value="regulated"]').checked = true;
+            document.querySelector('input[name="loanPurpose"][value="purchase"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
