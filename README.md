@@ -4,7 +4,6 @@
 
 [![Node.js](https://img.shields.io/badge/Node.js-14%2B-green)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18-blue)](https://expressjs.com/)
-[![License](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
 
 ## 📋 목차
 
