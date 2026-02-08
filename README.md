@@ -434,8 +434,7 @@ Copyright (c) 2026 부동산계산하기
 
 ## 📞 문의
 
-- 이슈: [GitHub Issues](https://github.com/your-username/real-estate-calculator/issues)
-- 이메일: contact@realestatecalc.com (예시)
+- 문의가 있으신 경우 이슈페이지를 이용해주세요.
 
 ## 🙏 감사의 말
 
@@ -445,4 +444,4 @@ Copyright (c) 2026 부동산계산하기
 
 ---
 
-**Made with ❤️ in South Korea**
+**비전공자가 열심히 만들고 있씁니다.**
