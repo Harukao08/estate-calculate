@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안전한 서비스 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+        .about-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .about-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 217, 181, 0.1) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+        .about-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        .about-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .content-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-content {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .security-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .security-item {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+        }
+        .security-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(0, 217, 181, 0.1) 0%, rgba(0, 184, 217, 0.1) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .security-content {
+            flex: 1;
+        }
+        .security-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .security-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 217, 181, 0.05) 0%, rgba(0, 184, 217, 0.05) 100%);
+            border: 1px solid rgba(0, 217, 181, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .highlight-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        .highlight-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: var(--primary);
+        }
+        .check-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 16px;
+        }
+        .check-item {
+            padding: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .check-icon {
+            color: var(--secondary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 87, 51, 0.05) 0%, rgba(255, 184, 0, 0.05) 100%);
+            border: 1px solid rgba(255, 87, 51, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .warning-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FF5733;
+            margin-bottom: 8px;
+        }
+        .warning-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <div class="about-container">
+        <a href="/" class="back-link">← 홈으로 돌아가기</a>
+
+        <div class="about-header">
+            <div class="about-icon">🔒</div>
+            <h1 class="about-title">안전한 서비스</h1>
+            <p class="about-subtitle">
+                개인정보 보호와 데이터 보안을 최우선으로 합니다
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">🔐 개인정보 보호</h2>
+            <div class="security-grid">
+                <div class="security-item">
+                    <div class="security-icon">🚫</div>
+                    <div class="security-content">
+                        <div class="security-title">수집하지 않습니다</div>
+                        <div class="security-desc">
+                            회원가입이 필요 없으며, 이름, 전화번호, 이메일 등 
+                            어떠한 개인정보도 수집하지 않습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="security-item">
+                    <div class="security-icon">💾</div>
+                    <div class="security-content">
+                        <div class="security-title">저장하지 않습니다</div>
+                        <div class="security-desc">
+                            입력한 금액, 주소, 주택 정보 등 모든 계산 데이터는 
+                            서버에 저장되지 않고 즉시 삭제됩니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="security-item">
+                    <div class="security-icon">🔒</div>
+                    <div class="security-content">
+                        <div class="security-title">암호화 통신</div>
+                        <div class="security-desc">
+                            모든 데이터 전송은 HTTPS 보안 프로토콜로 암호화되어
+                            외부 접근으로부터 안전하게 보호됩니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="security-item">
+                    <div class="security-icon">🕵️</div>
+                    <div class="security-content">
+                        <div class="security-title">추적하지 않습니다</div>
+                        <div class="security-desc">
+                            사용자 행동 추적, 쿠키, 광고 타겟팅 등 
+                            개인정보 침해 요소가 전혀 없습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">✅ 안심하고 사용하세요</div>
+                <div class="highlight-text">
+                    입력한 모든 정보는 계산 결과를 보여주는 데에만 사용되고,
+                    페이지를 닫으면 완전히 사라집니다. 누구도 여러분의 재산 정보를 알 수 없습니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">🛡️ 데이터 보안</h2>
+            <div class="section-content">
+                <p style="margin-bottom: 16px;">
+                    <strong>클라이언트 측 계산</strong><br>
+                    모든 계산은 여러분의 브라우저에서 직접 실행됩니다.
+                    입력한 데이터가 서버로 전송되지 않아 100% 안전합니다.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>로컬 임시 저장</strong><br>
+                    입력 편의를 위한 자동 저장 기능은 여러분의 기기에만 저장되며,
+                    원하면 언제든지 브라우저 설정에서 삭제할 수 있습니다.
+                </p>
+                <p>
+                    <strong>보안 업데이트</strong><br>
+                    정기적인 보안 점검과 업데이트를 통해
+                    최신 보안 위협으로부터 서비스를 보호합니다.
+                </p>
+            </div>
+
+            <ul class="check-list">
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>서버에 데이터 저장 안 함</span>
+                </li>
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>로그인/회원가입 불필요</span>
+                </li>
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>개인정보 수집 안 함</span>
+                </li>
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>쿠키 및 추적 안 함</span>
+                </li>
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>HTTPS 암호화 통신</span>
+                </li>
+                <li class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>광고 및 마케팅 없음</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">📱 안전한 이용 방법</h2>
+            <div class="section-content">
+                <p style="margin-bottom: 16px;">
+                    <strong>개인 기기 사용 권장</strong><br>
+                    PC방, 공용 컴퓨터보다는 개인 기기에서 사용하시면
+                    더욱 안전하게 이용할 수 있습니다.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>안전한 네트워크</strong><br>
+                    공공 Wi-Fi보다는 개인 인터넷 또는 모바일 데이터를 
+                    사용하시는 것을 권장합니다.
+                </p>
+                <p>
+                    <strong>결과 공유 주의</strong><br>
+                    계산 결과를 공유할 때는 민감한 금액 정보가 포함되어 있으므로
+                    신뢰할 수 있는 사람에게만 공유하세요.
+                </p>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 주의사항</div>
+                <div class="warning-text">
+                    본 서비스는 계산 도구일 뿐이며, 입력한 정보의 정확성과 
+                    보안은 사용자 본인의 책임입니다. 
+                    중요한 재산 정보는 신중하게 다뤄주시기 바랍니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">🤝 신뢰할 수 있는 서비스</h2>
+            <div class="section-content">
+                <p style="margin-bottom: 16px;">
+                    <strong>투명한 운영</strong><br>
+                    숨겨진 비용, 광고, 개인정보 수집 등이 전혀 없는
+                    깨끗하고 투명한 서비스를 제공합니다.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>지속적인 개선</strong><br>
+                    사용자 피드백을 적극 반영하여 더 나은 서비스를 만들어갑니다.
+                    불편한 점이나 개선 사항이 있다면 언제든 알려주세요.
+                </p>
+                <p>
+                    <strong>책임 있는 서비스</strong><br>
+                    정확한 계산, 최신 세법 반영, 보안 강화 등
+                    사용자에 대한 책임을 다하기 위해 노력합니다.
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">💡 우리의 약속</div>
+                <div class="highlight-text">
+                    부동산계산하기는 여러분의 개인정보와 재산 정보를 
+                    절대 수집, 저장, 판매하지 않습니다. 
+                    오직 정확한 계산 결과를 제공하는 것에만 집중합니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

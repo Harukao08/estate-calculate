@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최신 세법 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+        .about-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .about-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 217, 181, 0.1) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+        .about-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        .about-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .content-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-content {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .tax-list {
+            list-style: none;
+            padding: 0;
+        }
+        .tax-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .tax-item:last-child {
+            border-bottom: none;
+        }
+        .tax-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .tax-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .tax-date {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 16px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 217, 181, 0.05) 0%, rgba(0, 184, 217, 0.05) 100%);
+            border: 1px solid rgba(0, 217, 181, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .highlight-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        .highlight-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <div class="about-container">
+        <a href="/" class="back-link">← 홈으로 돌아가기</a>
+
+        <div class="about-header">
+            <div class="about-icon">📋</div>
+            <h1 class="about-title">최신 세법 반영</h1>
+            <p class="about-subtitle">
+                2026년 2월 기준 최신 부동산 관련 세법을 정확하게 반영합니다
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">🔄 최근 변경된 주요 세법</h2>
+            <ul class="tax-list">
+                <li class="tax-item">
+                    <div>
+                        <div class="tax-name">비과세 한도 상향</div>
+                        <div class="tax-desc">1세대 1주택 양도세 비과세 한도 12억원 유지</div>
+                    </div>
+                    <div class="tax-date">2023.01</div>
+                </li>
+                <li class="tax-item">
+                    <div>
+                        <div class="tax-name">취득세율 조정</div>
+                        <div class="tax-desc">다주택자 중과세율 일부 완화 (조정지역 기준)</div>
+                    </div>
+                    <div class="tax-date">2023.05</div>
+                </li>
+                <li class="tax-item">
+                    <div>
+                        <div class="tax-name">종합부동산세 개편</div>
+                        <div class="tax-desc">1세대 1주택 특별공제 상향 (12억→14억)</div>
+                    </div>
+                    <div class="tax-date">2024.01</div>
+                </li>
+                <li class="tax-item">
+                    <div>
+                        <div class="tax-name">전월세 전환율</div>
+                        <div class="tax-desc">법정 상한 전환율 연 4% 유지</div>
+                    </div>
+                    <div class="tax-date">2024.07</div>
+                </li>
+                <li class="tax-item">
+                    <div>
+                        <div class="tax-name">임대소득세 공제</div>
+                        <div class="tax-desc">필요경비 인정률 50% 기본, 임대사업자 60%</div>
+                    </div>
+                    <div class="tax-date">2025.01</div>
+                </li>
+            </ul>
+
+            <div class="highlight-box">
+                <div class="highlight-title">💡 실시간 세법 업데이트</div>
+                <div class="highlight-text">
+                    정부 정책 변경 시 즉시 반영하여 항상 정확한 계산 결과를 제공합니다.
+                    세법 개정 사항은 시행일 기준으로 자동 적용됩니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">📊 반영된 세금 항목</h2>
+            <div class="section-content">
+                <p style="margin-bottom: 16px;">
+                    <strong>주택 취득 시</strong><br>
+                    • 취득세 (1~12%, 주택 수 및 지역에 따라 차등)<br>
+                    • 지방교육세 (취득세의 10%)<br>
+                    • 농어촌특별세 (취득가 6억 초과 시 0.2%)
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>주택 보유 시</strong><br>
+                    • 재산세 (공시가격 기준 0.1~0.4%)<br>
+                    • 종합부동산세 (공시가격 합산 후 누진세율)<br>
+                    • 임대소득세 (월세 수입 종합소득세)
+                </p>
+                <p>
+                    <strong>주택 양도 시</strong><br>
+                    • 양도소득세 (양도차익 6~45% 누진세율)<br>
+                    • 장기보유특별공제 (최대 80%)<br>
+                    • 지방소득세 (양도세의 10%)
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">✅ 정확성 보장</h2>
+            <div class="section-content">
+                <p style="margin-bottom: 16px;">
+                    <strong>공식 자료 기반</strong><br>
+                    국세청, 기획재정부 등 정부 기관의 공식 세율표와 계산식을 
+                    그대로 적용하여 정확한 결과를 제공합니다.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>전문가 검증</strong><br>
+                    세무사, 공인중개사 등 부동산 전문가의 검토를 거쳐
+                    계산 로직의 정확성을 확인합니다.
+                </p>
+                <p>
+                    <strong>지속적인 업데이트</strong><br>
+                    세법 개정 시 즉시 반영하고, 계산 오류 발견 시 신속하게 수정합니다.
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">⚠️ 참고사항</div>
+                <div class="highlight-text">
+                    본 계산기는 일반적인 경우를 기준으로 하며, 개인의 특수한 상황 
+                    (농어촌주택, 상속주택, 다주택 조합 등)에 따라 실제 세액과 차이가 있을 수 있습니다.
+                    정확한 세액 산정은 세무사 등 전문가와 상담하시기 바랍니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
