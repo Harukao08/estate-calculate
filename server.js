@@ -188,6 +188,44 @@ app.get('/calculator/appropriate-rent', (req, res) => {
   });
 });
 
+app.get('/calculator/deposit-management', (req, res) => {
+  res.render('deposit-management', {
+    title: '보증금 운용 계산기 - 부동산계산하기'
+  });
+});
+
+app.get('/calculator/rental-registration', (req, res) => {
+  res.render('rental-registration', {
+    title: '임대사업자 혜택 분석 - 부동산계산하기'
+  });
+});
+
+app.get('/rent', (req, res) => {
+  res.render('rent', {
+    title: '집을 빌려주려고 해요 - 부동산계산하기',
+    description: '임대 관련 계산과 전월세 전환을 도와드립니다'
+  });
+});
+
+// About pages
+app.get('/about/latest-tax-law', (req, res) => {
+  res.render('about/latest-tax-law', {
+    title: '최신 세법 - 부동산계산하기'
+  });
+});
+
+app.get('/about/fast-calculation', (req, res) => {
+  res.render('about/fast-calculation', {
+    title: '빠른 계산 - 부동산계산하기'
+  });
+});
+
+app.get('/about/secure-service', (req, res) => {
+  res.render('about/secure-service', {
+    title: '안전한 서비스 - 부동산계산하기'
+  });
+});
+
 // 계산기 API 엔드포인트 (예시)
 app.post('/api/calculate/acquisition-tax', (req, res) => {
   // 취득세 계산 로직
