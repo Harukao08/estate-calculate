@@ -425,12 +425,6 @@ npm run coverage
 - 🎨 반응형 디자인 최적화
 - 🔒 보안 강화 (Helmet, CSP)
 
-## 📄 라이선스
-
-ISC License
-
-Copyright (c) 2026 부동산계산하기
-
 ## 📞 문의
 
 - 문의가 있으신 경우 이슈페이지를 이용해주세요.
