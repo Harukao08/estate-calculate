@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보증금 운용 계산기 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/rent" class="back-button">
+            ← 집을 빌려주려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">🏦</div>
+            <h1 class="calculator-title">보증금 운용 계산기</h1>
+            <p class="calculator-subtitle">받은 보증금의 예치 및 운용 수익을 계산합니다</p>
+        </div>
+
+        <!-- 보증금 운용 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 보증금 운용이란?
+            </div>
+            <div class="info-content">
+                임차인에게 받은 보증금을 은행 예금, 적금 등으로 운용하여 수익을 내는 것입니다.
+                <br><br>
+                • <strong>법적 의무</strong>: 임대보증금 반환보증 가입 권장<br>
+                • <strong>안전한 운용</strong>: 예금자보호 한도(5천만원) 고려<br>
+                • <strong>수익 극대화</strong>: 고금리 상품, CMA, MMF 활용<br>
+                • <strong>세금</strong>: 이자소득세 15.4% 원천징수<br>
+                <br>
+                보증금을 안전하게 운용하면서 추가 수익을 창출할 수 있습니다.
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">보증금 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">받은 보증금</label>
+                <div class="input-wrapper">
+                    <input type="text" id="depositAmount" class="input-field" placeholder="예: 100000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">임차인에게 받은 보증금 총액</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">임대 기간</label>
+                <div class="input-wrapper">
+                    <input type="text" id="rentalPeriod" class="input-field" placeholder="24" inputmode="numeric" value="24">
+                    <span class="input-suffix">개월</span>
+                </div>
+                <div class="input-helper">계약 기간 (일반적으로 24개월)</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">운용 방식</h2>
+            
+            <div class="input-group">
+                <label class="input-label">운용 상품</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="productType" value="savings" checked>
+                        <span class="radio-label">예금 (정기예금)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="productType" value="installment">
+                        <span class="radio-label">적금 (정기적금)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="productType" value="cma">
+                        <span class="radio-label">CMA/MMF</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="productType" value="custom">
+                        <span class="radio-label">직접 입력</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">예상 이자율 (연)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="interestRate" class="input-field" placeholder="3.5" inputmode="decimal" value="3.5">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">현재 시중 금리 참고 (2024년 기준 3~4%)</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">이자 계산 방식</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="interestType" value="simple" checked>
+                        <span class="radio-label">단리</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="interestType" value="compound">
+                        <span class="radio-label">복리</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">추가 옵션</h2>
+            
+            <div class="input-group">
+                <label class="input-label">임대보증보험 가입</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="insurance" value="no" checked>
+                        <span class="radio-label">미가입</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="insurance" value="yes">
+                        <span class="radio-label">가입</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group" id="insuranceRateSection" style="display: none;">
+                <label class="input-label">보증보험료율</label>
+                <div class="input-wrapper">
+                    <input type="text" id="insuranceRate" class="input-field" placeholder="0.128" inputmode="decimal" value="0.128">
+                    <span class="input-suffix">%</span>
+                </div>
+                <div class="input-helper">일반적으로 연 0.128% 수준</div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                보증금 운용 수익 계산하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">🏦 계산 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 순수익 (세후)</div>
+                <div class="result-value" id="netProfit">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">보증금 운용 정보</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보증금</span>
+                    <span class="breakdown-value" id="displayDepositAmount">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">운용 기간</span>
+                    <span class="breakdown-value" id="displayRentalPeriod">0개월</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">운용 상품</span>
+                    <span class="breakdown-value" id="displayProductType">-</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">이자율 (연)</span>
+                    <span class="breakdown-value" id="displayInterestRate">0%</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">이자 방식</span>
+                    <span class="breakdown-value" id="displayInterestType">-</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">수익 계산</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">총 이자 수익 (세전)</span>
+                    <span class="breakdown-value" id="totalInterest">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">이자소득세 (15.4%)</span>
+                    <span class="breakdown-value" id="interestTax">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">이자 순수익 (세후)</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="netInterest">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown" id="insuranceSection" style="display: none;">
+                <h3 class="breakdown-title">임대보증보험료</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보증보험료</span>
+                    <span class="breakdown-value" id="insuranceFee">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">보험료율 (연)</span>
+                    <span class="breakdown-value" id="displayInsuranceRate">0%</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">최종 수익</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">이자 순수익</span>
+                    <span class="breakdown-value" id="finalNetInterest">0원</span>
+                </div>
+                <div class="breakdown-item" id="insuranceCostItem" style="display: none;">
+                    <span class="breakdown-label">보증보험료 (-)</span>
+                    <span class="breakdown-value" id="displayInsuranceFee">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700;">총 순수익</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="displayNetProfit">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">월 환산 수익</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">월평균 수익</span>
+                    <span class="breakdown-value" id="monthlyProfit">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">실질 월수익률</span>
+                    <span class="breakdown-value" id="monthlyYield">0%</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">상품별 비교 (같은 조건)</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">정기예금 (3.5%)</span>
+                    <span class="breakdown-value" id="savingsComparison">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">CMA (3.0%)</span>
+                    <span class="breakdown-value" id="cmaComparison">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">MMF (2.8%)</span>
+                    <span class="breakdown-value" id="mmfComparison">0원</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text">
+                    <strong>보증금 운용 주의사항</strong><br>
+                    • 예금자보호 한도 5천만원 초과분은 여러 은행 분산<br>
+                    • 임대보증보험 가입 시 세입자 안심<br>
+                    • 계약 만료일에 맞춰 만기 설정<br>
+                    • 중도 해지 불이익 고려하여 유동성 확보<br>
+                    • 고위험 투자 절대 금지 (원금 보존 필수)
+                </div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>보증금 운용 팁</strong><br>
+                    • 5천만원 초과 시 복수 은행 활용<br>
+                    • 특판 금리 상품 적극 활용<br>
+                    • CMA/MMF는 언제든 찾을 수 있어 유리<br>
+                    • 재계약 가능성 고려하여 자동연장 설정<br>
+                    • 세금우대 상품 활용 (조건 충족 시)
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateDepositManagement);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드
+            ['depositAmount', 'rentalPeriod', 'interestRate', 'insuranceRate'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') calculateDepositManagement();
+                    });
+                }
+            });
+
+            // 보험 가입 여부에 따라 보험료율 입력 표시
+            const insuranceInputs = document.querySelectorAll('input[name="insurance"]');
+            insuranceInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const insuranceRateSection = document.getElementById('insuranceRateSection');
+                    if (this.value === 'yes') {
+                        insuranceRateSection.style.display = 'block';
+                    } else {
+                        insuranceRateSection.style.display = 'none';
+                    }
+                });
+            });
+
+            // 운용 상품에 따라 이자율 자동 설정
+            const productTypeInputs = document.querySelectorAll('input[name="productType"]');
+            productTypeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const interestRateInput = document.getElementById('interestRate');
+                    if (this.value === 'savings') {
+                        interestRateInput.value = '3.5';
+                    } else if (this.value === 'installment') {
+                        interestRateInput.value = '3.0';
+                    } else if (this.value === 'cma') {
+                        interestRateInput.value = '3.0';
+                    }
+                });
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculateInterest(principal, rate, months, isCompound) {
+            const annualRate = rate / 100;
+            const years = months / 12;
+            
+            if (isCompound) {
+                // 복리: P × (1 + r)^t - P
+                return principal * Math.pow(1 + annualRate, years) - principal;
+            } else {
+                // 단리: P × r × t
+                return principal * annualRate * years;
+            }
+        }
+
+        function calculateDepositManagement() {
+            const depositAmount = parseInt(document.getElementById('depositAmount').value) || 0;
+            const rentalPeriod = parseInt(document.getElementById('rentalPeriod').value) || 24;
+            const productType = document.querySelector('input[name="productType"]:checked').value;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 3.5;
+            const interestType = document.querySelector('input[name="interestType"]:checked').value;
+            const insurance = document.querySelector('input[name="insurance"]:checked').value;
+            const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0.128;
+
+            if (depositAmount === 0) {
+                alert('보증금을 입력해주세요.');
+                return;
+            }
+
+            // 상품명
+            let productName = '';
+            if (productType === 'savings') productName = '정기예금';
+            else if (productType === 'installment') productName = '정기적금';
+            else if (productType === 'cma') productName = 'CMA/MMF';
+            else productName = '사용자 지정';
+
+            // 이자 계산 방식
+            const isCompound = interestType === 'compound';
+            const interestTypeName = isCompound ? '복리' : '단리';
+
+            // 총 이자 수익 (세전)
+            const totalInterest = calculateInterest(depositAmount, interestRate, rentalPeriod, isCompound);
+
+            // 이자소득세 (15.4%)
+            const interestTax = totalInterest * 0.154;
+
+            // 이자 순수익 (세후)
+            const netInterest = totalInterest - interestTax;
+
+            // 임대보증보험료
+            let insuranceFee = 0;
+            if (insurance === 'yes') {
+                insuranceFee = depositAmount * (insuranceRate / 100) * (rentalPeriod / 12);
+            }
+
+            // 총 순수익
+            const netProfit = netInterest - insuranceFee;
+
+            // 월평균 수익
+            const monthlyProfit = netProfit / rentalPeriod;
+
+            // 실질 월수익률
+            const monthlyYield = (monthlyProfit / depositAmount) * 100;
+
+            // 상품별 비교 (단리, 세후)
+            const savingsInterest = calculateInterest(depositAmount, 3.5, rentalPeriod, false) * 0.846;
+            const cmaInterest = calculateInterest(depositAmount, 3.0, rentalPeriod, false) * 0.846;
+            const mmfInterest = calculateInterest(depositAmount, 2.8, rentalPeriod, false) * 0.846;
+
+            // 결과 메시지
+            let resultInfo = `보증금 ${formatKoreanCurrency(depositAmount)}을 ${rentalPeriod}개월간 ${productName} (${interestRate}%, ${interestTypeName})로 운용 시 `;
+            resultInfo += `세후 ${formatKoreanCurrency(netProfit)}의 순수익이 발생합니다. `;
+            if (monthlyYield >= 0.25) {
+                resultInfo += `월 환산 ${formatKoreanCurrency(monthlyProfit)}로 양호한 수익률입니다.`;
+            } else {
+                resultInfo += `월 환산 ${formatKoreanCurrency(monthlyProfit)}입니다.`;
+            }
+
+            // 결과 표시
+            document.getElementById('netProfit').textContent = formatKoreanCurrency(netProfit);
+            
+            document.getElementById('displayDepositAmount').textContent = formatCurrency(depositAmount);
+            document.getElementById('displayRentalPeriod').textContent = rentalPeriod + '개월';
+            document.getElementById('displayProductType').textContent = productName;
+            document.getElementById('displayInterestRate').textContent = interestRate + '%';
+            document.getElementById('displayInterestType').textContent = interestTypeName;
+            
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('interestTax').textContent = formatCurrency(interestTax);
+            document.getElementById('netInterest').textContent = formatCurrency(netInterest);
+            
+            if (insurance === 'yes') {
+                document.getElementById('insuranceSection').style.display = 'block';
+                document.getElementById('insuranceFee').textContent = formatCurrency(insuranceFee);
+                document.getElementById('displayInsuranceRate').textContent = insuranceRate + '%';
+                document.getElementById('insuranceCostItem').style.display = 'flex';
+                document.getElementById('displayInsuranceFee').textContent = formatCurrency(insuranceFee);
+            } else {
+                document.getElementById('insuranceSection').style.display = 'none';
+                document.getElementById('insuranceCostItem').style.display = 'none';
+            }
+            
+            document.getElementById('finalNetInterest').textContent = formatCurrency(netInterest);
+            document.getElementById('displayNetProfit').textContent = formatCurrency(netProfit);
+            
+            document.getElementById('monthlyProfit').textContent = formatCurrency(monthlyProfit);
+            document.getElementById('monthlyYield').textContent = monthlyYield.toFixed(3) + '%';
+            
+            document.getElementById('savingsComparison').textContent = formatCurrency(savingsInterest);
+            document.getElementById('cmaComparison').textContent = formatCurrency(cmaInterest);
+            document.getElementById('mmfComparison').textContent = formatCurrency(mmfInterest);
+            
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('depositAmount').value = '';
+            document.getElementById('rentalPeriod').value = '24';
+            document.getElementById('interestRate').value = '3.5';
+            document.getElementById('insuranceRate').value = '0.128';
+            document.querySelector('input[name="productType"][value="savings"]').checked = true;
+            document.querySelector('input[name="interestType"][value="simple"]').checked = true;
+            document.querySelector('input[name="insurance"][value="no"]').checked = true;
+            document.getElementById('insuranceRateSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const netProfit = document.getElementById('netProfit').textContent;
+            const depositAmount = document.getElementById('displayDepositAmount').textContent;
+            const text = `부동산계산하기에서 보증금 운용 수익을 계산했어요!\n보증금: ${depositAmount}\n총 순수익: ${netProfit}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '보증금 운용 계산 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>

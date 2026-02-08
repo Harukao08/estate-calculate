@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임대사업자 혜택 분석 - 부동산계산하기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/calculator.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">부</div>
+            <a href="/" style="text-decoration: none; color: inherit;">부동산계산하기</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 32px; padding-bottom: 80px;">
+        <a href="/rent" class="back-button">
+            ← 집을 빌려주려고 해요
+        </a>
+
+        <div class="calculator-header">
+            <div class="calculator-icon-large">📋</div>
+            <h1 class="calculator-title">임대사업자 혜택 분석</h1>
+            <p class="calculator-subtitle">임대사업자 등록 시 세제 혜택을 분석합니다</p>
+        </div>
+
+        <!-- 임대사업자 안내 -->
+        <div class="info-box">
+            <div class="info-title">
+                💡 임대사업자 등록이란?
+            </div>
+            <div class="info-content">
+                주택을 임대하는 사람이 지방자치단체에 임대사업자로 등록하여 세제 혜택을 받는 제도입니다.
+                <br><br>
+                <strong>주요 혜택</strong><br>
+                • <strong>취득세 감면</strong>: 일반 대비 최대 85% 감면<br>
+                • <strong>재산세 감면</strong>: 최대 75% 감면<br>
+                • <strong>종부세 합산배제</strong>: 일정 요건 충족 시<br>
+                • <strong>양도세 감면</strong>: 장기임대 시 중과배제 + 공제<br>
+                <br>
+                <strong>주의사항</strong><br>
+                • 의무임대기간 준수 (4년 or 8년)<br>
+                • 임대료 증액 제한 (연 5%)<br>
+                • 중도 해지 시 감면세액 추징
+            </div>
+        </div>
+
+        <!-- 계산 입력 폼 -->
+        <div class="calc-section">
+            <h2 class="calc-section-title">주택 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">주택 취득가</label>
+                <div class="input-wrapper">
+                    <input type="text" id="acquisitionPrice" class="input-field" placeholder="예: 400000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">주택 구매 가격</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 공시가격</label>
+                <div class="input-wrapper">
+                    <input type="text" id="publicPrice" class="input-field" placeholder="예: 350000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">재산세, 종부세 계산 기준</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 유형</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="apartment" checked>
+                        <span class="radio-label">아파트</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="officetel">
+                        <span class="radio-label">오피스텔</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="houseType" value="detached">
+                        <span class="radio-label">단독/다가구</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">주택 면적</label>
+                <div class="input-wrapper">
+                    <input type="text" id="area" class="input-field" placeholder="85" inputmode="numeric">
+                    <span class="input-suffix">㎡</span>
+                </div>
+                <div class="input-helper">전용면적 (공급면적 아님)</div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">임대 조건</h2>
+            
+            <div class="input-group">
+                <label class="input-label">임대 유형</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="rentalType" value="longTerm" checked>
+                        <span class="radio-label">장기임대 (8년)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="rentalType" value="midTerm">
+                        <span class="radio-label">단기임대 (4년)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">월세 (예정)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="monthlyRent" class="input-field" placeholder="예: 1000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+                <div class="input-helper">월 임대료</div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">보증금 (예정)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="deposit" class="input-field" placeholder="예: 50000000" inputmode="numeric">
+                    <span class="input-suffix">원</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h2 class="calc-section-title">기타 정보</h2>
+            
+            <div class="input-group">
+                <label class="input-label">소재지</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="regulated" checked>
+                        <span class="radio-label">조정대상지역</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="location" value="general">
+                        <span class="radio-label">일반지역</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">보유 주택 수 (취득 후)</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="1" checked>
+                        <span class="radio-label">1주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="2">
+                        <span class="radio-label">2주택</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="housingCount" value="3">
+                        <span class="radio-label">3주택 이상</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="calc-button" id="calculateButton">
+                임대사업자 혜택 분석하기
+            </button>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="resultSection" class="result-section" style="display: none;">
+            <h2 class="result-title">📋 분석 결과</h2>
+            
+            <div class="result-card total">
+                <div class="result-label">총 절세 효과 (8년)</div>
+                <div class="result-value" id="totalBenefit">0원</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">취득세 비교</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">일반 취득세</span>
+                    <span class="breakdown-value" id="normalAcquisitionTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">임대사업자 취득세</span>
+                    <span class="breakdown-value" id="rentalAcquisitionTax">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">취득세 절감</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="acquisitionTaxSaving">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">재산세 비교 (연간)</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">일반 재산세</span>
+                    <span class="breakdown-value" id="normalPropertyTax">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">임대사업자 재산세</span>
+                    <span class="breakdown-value" id="rentalPropertyTax">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 217, 181, 0.1); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700; color: var(--secondary);">연간 재산세 절감</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--secondary);" id="propertyTaxSaving">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">8년간 총 혜택</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">취득세 절감 (1회)</span>
+                    <span class="breakdown-value" id="totalAcquisitionSaving">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">재산세 절감 (8년)</span>
+                    <span class="breakdown-value" id="totalPropertySaving">0원</span>
+                </div>
+                <div class="breakdown-item" style="background: rgba(0, 102, 255, 0.05); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <span class="breakdown-label" style="font-weight: 700;">총 절세액</span>
+                    <span class="breakdown-value" style="font-weight: 700; color: var(--primary);" id="displayTotalBenefit">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">임대소득세 분석</h3>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">연간 임대수입</span>
+                    <span class="breakdown-value" id="annualRentalIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">필요경비 공제 (50%)</span>
+                    <span class="breakdown-value" id="necessaryExpense">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">과세 대상 소득</span>
+                    <span class="breakdown-value" id="taxableIncome">0원</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">예상 임대소득세 (연)</span>
+                    <span class="breakdown-value" id="rentalIncomeTax">0원</span>
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h3 class="breakdown-title">등록 조건 충족 여부</h3>
+                <div class="breakdown-item" id="areaRequirement">
+                    <span class="breakdown-label">면적 요건 (85㎡ 이하)</span>
+                    <span class="breakdown-value" id="areaResult">-</span>
+                </div>
+                <div class="breakdown-item" id="priceRequirement">
+                    <span class="breakdown-label">가격 요건 (6억 이하)</span>
+                    <span class="breakdown-value" id="priceResult">-</span>
+                </div>
+                <div class="breakdown-item" id="locationRequirement">
+                    <span class="breakdown-label">지역 요건</span>
+                    <span class="breakdown-value" id="locationResult">-</span>
+                </div>
+            </div>
+
+            <div class="result-info">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text" id="resultInfo"></div>
+            </div>
+
+            <div class="result-info" style="background: rgba(255, 87, 51, 0.05); border-color: rgba(255, 87, 51, 0.2);">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text">
+                    <strong>의무사항 (반드시 준수)</strong><br>
+                    • 의무임대기간: 단기 4년, 장기 8년<br>
+                    • 임대료 증액 제한: 연 5% 이내<br>
+                    • 임차인 변경 시 재신고 필요<br>
+                    • 중도 해지 시 감면세액 + 이자 추징<br>
+                    • 임대료 신고: 매년 임대차계약 신고
+                </div>
+            </div>
+
+            <div class="result-info" style="background: rgba(0, 217, 181, 0.05); border-color: rgba(0, 217, 181, 0.2);">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>임대사업자 등록 추천 대상</strong><br>
+                    • 장기 임대 예정자 (8년 이상)<br>
+                    • 85㎡ 이하 주택 보유자<br>
+                    • 다주택자 (세제 혜택 큼)<br>
+                    • 안정적인 임대수익 원하는 경우<br>
+                    <br>
+                    <strong>등록 비추천 대상</strong><br>
+                    • 단기 매매 예정자<br>
+                    • 임대료 인상 필요성 높은 경우<br>
+                    • 의무 기간 준수 어려운 경우
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button secondary" id="resetButton">
+                    다시 계산하기
+                </button>
+                <button class="action-button primary" id="shareButton">
+                    결과 공유하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton) {
+                calculateButton.addEventListener('click', calculateBenefits);
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetCalculator);
+            }
+
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareResult);
+            }
+
+            // 숫자 입력 필드
+            ['acquisitionPrice', 'publicPrice', 'area', 'monthlyRent', 'deposit'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        e.target.value = value;
+                    });
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') calculateBenefits();
+                    });
+                }
+            });
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function formatCurrency(num) {
+            return formatNumber(num) + '원';
+        }
+
+        function formatKoreanCurrency(num) {
+            const billion = Math.floor(num / 100000000);
+            const tenThousand = Math.floor((num % 100000000) / 10000);
+            const remainder = num % 10000;
+            
+            let result = '';
+            if (billion > 0) result += billion + '억 ';
+            if (tenThousand > 0) result += formatNumber(tenThousand) + '만 ';
+            if (remainder > 0 && billion === 0) result += formatNumber(remainder);
+            
+            return result.trim() + '원';
+        }
+
+        function calculateBenefits() {
+            const acquisitionPrice = parseInt(document.getElementById('acquisitionPrice').value) || 0;
+            const publicPrice = parseInt(document.getElementById('publicPrice').value) || 0;
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const monthlyRent = parseInt(document.getElementById('monthlyRent').value) || 0;
+            const deposit = parseInt(document.getElementById('deposit').value) || 0;
+            const houseType = document.querySelector('input[name="houseType"]:checked').value;
+            const rentalType = document.querySelector('input[name="rentalType"]:checked').value;
+            const location = document.querySelector('input[name="location"]:checked').value;
+            const housingCount = parseInt(document.querySelector('input[name="housingCount"]:checked').value);
+
+            if (acquisitionPrice === 0 || publicPrice === 0) {
+                alert('주택 취득가와 공시가격을 입력해주세요.');
+                return;
+            }
+
+            // 등록 요건 체크
+            const areaOk = area <= 85;
+            const priceOk = acquisitionPrice <= 600000000;
+            const locationOk = true; // 대부분 지역 가능
+
+            // 1. 취득세 계산
+            let normalAcquisitionTaxRate = 0;
+            let rentalAcquisitionTaxRate = 0;
+
+            if (housingCount === 1) {
+                if (acquisitionPrice <= 600000000) normalAcquisitionTaxRate = 0.01;
+                else if (acquisitionPrice <= 900000000) normalAcquisitionTaxRate = 0.02;
+                else normalAcquisitionTaxRate = 0.03;
+            } else if (housingCount === 2) {
+                if (location === 'regulated') normalAcquisitionTaxRate = 0.08;
+                else normalAcquisitionTaxRate = 0.04;
+            } else {
+                if (location === 'regulated') normalAcquisitionTaxRate = 0.12;
+                else normalAcquisitionTaxRate = 0.04;
+            }
+
+            // 임대사업자 취득세 (85% 감면)
+            rentalAcquisitionTaxRate = normalAcquisitionTaxRate * 0.15;
+
+            const normalAcquisitionTax = acquisitionPrice * normalAcquisitionTaxRate;
+            const rentalAcquisitionTax = acquisitionPrice * rentalAcquisitionTaxRate;
+            const acquisitionTaxSaving = normalAcquisitionTax - rentalAcquisitionTax;
+
+            // 2. 재산세 계산
+            let normalPropertyTaxRate = 0.001; // 주택 기본
+            const rentalPropertyTaxRate = normalPropertyTaxRate * 0.25; // 75% 감면
+
+            const normalPropertyTax = publicPrice * normalPropertyTaxRate;
+            const rentalPropertyTax = publicPrice * rentalPropertyTaxRate;
+            const propertyTaxSaving = normalPropertyTax - rentalPropertyTax;
+
+            // 3. 8년간 총 혜택
+            const years = rentalType === 'longTerm' ? 8 : 4;
+            const totalAcquisitionSaving = acquisitionTaxSaving;
+            const totalPropertySaving = propertyTaxSaving * years;
+            const totalBenefit = totalAcquisitionSaving + totalPropertySaving;
+
+            // 4. 임대소득세
+            const annualRentalIncome = monthlyRent * 12;
+            const necessaryExpense = annualRentalIncome * 0.5; // 필요경비 50%
+            const taxableIncome = annualRentalIncome - necessaryExpense;
+            let rentalIncomeTax = 0;
+            
+            if (taxableIncome > 0) {
+                // 간이세액: 14% (지방소득세 포함 15.4%)
+                rentalIncomeTax = taxableIncome * 0.154;
+            }
+
+            // 결과 메시지
+            let resultInfo = '';
+            if (areaOk && priceOk) {
+                resultInfo = `임대사업자 등록 요건을 충족합니다. ${years}년간 약 ${formatKoreanCurrency(totalBenefit)}의 세금을 절감할 수 있습니다. `;
+                if (totalBenefit > 10000000) {
+                    resultInfo += '등록을 적극 권장합니다.';
+                } else if (totalBenefit > 5000000) {
+                    resultInfo += '등록을 고려해볼 만합니다.';
+                } else {
+                    resultInfo += '혜택이 크지 않으므로 신중히 결정하세요.';
+                }
+            } else {
+                resultInfo = '임대사업자 등록 요건을 충족하지 못합니다. ';
+                if (!areaOk) resultInfo += '면적이 85㎡를 초과합니다. ';
+                if (!priceOk) resultInfo += '취득가가 6억원을 초과합니다. ';
+            }
+
+            // 결과 표시
+            document.getElementById('totalBenefit').textContent = formatKoreanCurrency(totalBenefit);
+            
+            document.getElementById('normalAcquisitionTax').textContent = formatCurrency(normalAcquisitionTax);
+            document.getElementById('rentalAcquisitionTax').textContent = formatCurrency(rentalAcquisitionTax);
+            document.getElementById('acquisitionTaxSaving').textContent = formatCurrency(acquisitionTaxSaving);
+            
+            document.getElementById('normalPropertyTax').textContent = formatCurrency(normalPropertyTax);
+            document.getElementById('rentalPropertyTax').textContent = formatCurrency(rentalPropertyTax);
+            document.getElementById('propertyTaxSaving').textContent = formatCurrency(propertyTaxSaving);
+            
+            document.getElementById('totalAcquisitionSaving').textContent = formatCurrency(totalAcquisitionSaving);
+            document.getElementById('totalPropertySaving').textContent = formatCurrency(totalPropertySaving);
+            document.getElementById('displayTotalBenefit').textContent = formatCurrency(totalBenefit);
+            
+            document.getElementById('annualRentalIncome').textContent = formatCurrency(annualRentalIncome);
+            document.getElementById('necessaryExpense').textContent = formatCurrency(necessaryExpense);
+            document.getElementById('taxableIncome').textContent = formatCurrency(taxableIncome);
+            document.getElementById('rentalIncomeTax').textContent = formatCurrency(rentalIncomeTax);
+            
+            // 요건 충족 여부
+            document.getElementById('areaResult').textContent = areaOk ? '✓ 충족' : '✗ 미충족';
+            document.getElementById('areaResult').style.color = areaOk ? 'var(--secondary)' : '#FF5733';
+            document.getElementById('priceResult').textContent = priceOk ? '✓ 충족' : '✗ 미충족';
+            document.getElementById('priceResult').style.color = priceOk ? 'var(--secondary)' : '#FF5733';
+            document.getElementById('locationResult').textContent = locationOk ? '✓ 충족' : '✗ 미충족';
+            document.getElementById('locationResult').style.color = locationOk ? 'var(--secondary)' : '#FF5733';
+            
+            document.getElementById('resultInfo').textContent = resultInfo;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('acquisitionPrice').value = '';
+            document.getElementById('publicPrice').value = '';
+            document.getElementById('area').value = '';
+            document.getElementById('monthlyRent').value = '';
+            document.getElementById('deposit').value = '';
+            document.querySelector('input[name="houseType"][value="apartment"]').checked = true;
+            document.querySelector('input[name="rentalType"][value="longTerm"]').checked = true;
+            document.querySelector('input[name="location"][value="regulated"]').checked = true;
+            document.querySelector('input[name="housingCount"][value="1"]').checked = true;
+            document.getElementById('resultSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareResult() {
+            const totalBenefit = document.getElementById('totalBenefit').textContent;
+            const text = `부동산계산하기에서 임대사업자 혜택을 분석했어요!\n총 절세 효과: ${totalBenefit}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '임대사업자 혜택 분석 결과',
+                    text: text
+                });
+            } else {
+                alert('결과가 클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(text);
+            }
+        }
+    </script>
+</body>
+</html>
